@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syncovate Meeting Kit Generator</title>
+<meta name="description" content="Generate a customized meeting facilitation kit in minutes. Choose your meeting type, group size, and experience level — walk in with everything you need.">
+<meta property="og:title" content="Syncovate Meeting Kit Generator">
+<meta property="og:description" content="Answer three questions. Walk in with everything you need. A structured meeting facilitation tool built on Strategic Doing methodology.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Syncovate Meeting Kit Generator">
+<meta name="twitter:description" content="Answer three questions. Walk in with everything you need.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='%23C4935A'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='white' font-family='serif'>S</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bronze: #C4935A;
+  --bronze-light: #d4a86e;
+  --bronze-pale: rgba(196,147,90,0.08);
+  --bronze-border: rgba(196,147,90,0.25);
+  --teal: #56ADBF;
+  --teal-pale: rgba(86,173,191,0.1);
+  --teal-border: rgba(86,173,191,0.3);
+  --charcoal-deep: #252830;
+  --charcoal: #3D4148;
+  --cream: #FAF8F5;
+  --warm-gray: #F0EDE8;
+  --warn-bg: #fff8f0;
+  --warn-border: rgba(196,147,90,0.4);
+  --alert-bg: #fff4f0;
+  --alert-border: rgba(180,80,50,0.25);
+  --alert-text: #b44830;
+  --text: #252830;
+  --text-mid: #5a5f68;
+  --text-light: #8a8f98;
+  --border: #e4e1dc;
+  --white: #ffffff;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+.wrap { max-width: 700px; margin: 0 auto; padding: 0 20px 80px; }
+
+/* HEADER */
+.header { padding: 44px 0 32px; text-align: center; }
+.brand {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--bronze); margin-bottom: 10px;
+}
+.header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(26px, 5vw, 38px);
+  font-weight: 500; color: var(--charcoal-deep);
+  margin-bottom: 10px; line-height: 1.2;
+}
+.header p { font-size: 15px; color: var(--text-mid); max-width: 460px; margin: 0 auto; }
+
+/* PROGRESS */
+.progress { display: flex; align-items: center; gap: 8px; margin-bottom: 36px; }
+.progress-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-light); min-width: 32px; }
+.bar { flex: 1; height: 2px; background: var(--border); border-radius: 2px; transition: background .4s; }
+.bar.on { background: var(--bronze); }
+.bar.done { background: var(--bronze); }
+
+/* STEPS */
+.step { display: none; }
+.step.show { display: block; animation: up .35s ease; }
+@keyframes up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+.step-label {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-light); margin-bottom: 8px;
+}
+.step h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px; font-weight: 500;
+  color: var(--charcoal-deep); margin-bottom: 6px;
+}
+.step > p { font-size: 14px; color: var(--text-mid); margin-bottom: 22px; line-height: 1.55; }
+
+/* QUESTION CARDS */
+.q-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+@media(max-width:500px) { .q-grid { grid-template-columns: 1fr; } }
+
+.q-card {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s, transform .15s;
+  background: var(--white);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+.q-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--bronze); opacity: 0; transition: opacity .2s;
+}
+.q-card:hover, .q-card:focus-visible { border-color: #c8c4be; transform: translateY(-2px); outline: none; }
+.q-card:hover::before, .q-card:focus-visible::before { opacity: 0.4; }
+.q-card:focus-visible { box-shadow: 0 0 0 2px var(--bronze); }
+.q-card.sel { border-color: var(--bronze); background: var(--bronze-pale); }
+.q-card.sel::before { opacity: 1; }
+
+.q-altitude {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-light); margin-bottom: 8px;
+}
+.q-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 500;
+  color: var(--charcoal-deep); line-height: 1.2; margin-bottom: 6px;
+}
+.q-card p { font-size: 12px; color: var(--text-mid); line-height: 1.5; }
+
+/* SIZE BANDS */
+.size-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 28px; }
+@media(max-width:500px) { .size-grid { grid-template-columns: 1fr; } }
+
+.size-card {
+  border: 1.5px solid var(--border); border-radius: var(--radius);
+  padding: 20px 16px; cursor: pointer;
+  transition: border-color .2s, background .2s;
+  background: var(--white); text-align: center;
+  position: relative; overflow: hidden;
+}
+.size-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--bronze); opacity: 0; transition: opacity .2s;
+}
+.size-card:hover, .size-card:focus-visible { border-color: #c8c4be; outline: none; }
+.size-card:hover::before, .size-card:focus-visible::before { opacity: 0.4; }
+.size-card:focus-visible { box-shadow: 0 0 0 2px var(--bronze); }
+.size-card.sel { border-color: var(--bronze); background: var(--bronze-pale); }
+.size-card.sel::before { opacity: 1; }
+
+.size-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px; font-weight: 500; color: var(--bronze);
+  line-height: 1; margin-bottom: 4px;
+}
+.size-range {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-light); margin-bottom: 8px;
+}
+.size-card h3 { font-size: 13px; font-weight: 500; color: var(--charcoal-deep); margin-bottom: 4px; }
+.size-card p { font-size: 11px; color: var(--text-mid); line-height: 1.45; }
+
+/* SIZE + QUESTION COMPATIBILITY NOTE */
+.compat-note {
+  border-radius: var(--radius-sm); padding: 12px 16px;
+  margin-bottom: 28px; font-size: 13px; line-height: 1.55;
+  display: none;
+}
+.compat-note.warn { background: var(--warn-bg); border: 1px solid var(--warn-border); color: #7a5520; }
+.compat-note.alert { background: var(--alert-bg); border: 1px solid var(--alert-border); color: var(--alert-text); }
+.compat-note.good { background: var(--teal-pale); border: 1px solid var(--teal-border); color: #2a7a8a; }
+.compat-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; font-weight: 500; }
+
+/* FAMILIARITY */
+.fam-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 28px; }
+@media(max-width:500px) { .fam-grid { grid-template-columns: 1fr; } }
+
+.fam-card {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px; cursor: pointer;
+  transition: border-color .2s, background .2s; background: var(--white);
+}
+.fam-card:hover, .fam-card:focus-visible { border-color: #c8c4be; outline: none; }
+.fam-card:focus-visible { box-shadow: 0 0 0 2px var(--bronze); }
+.fam-card.sel { border-color: var(--bronze); background: var(--bronze-pale); }
+.fam-card h3 { font-size: 14px; font-weight: 500; color: var(--charcoal-deep); margin-bottom: 3px; }
+.fam-card p { font-size: 12px; color: var(--text-mid); line-height: 1.45; }
+
+/* BUTTONS */
+.btn-row { display: flex; justify-content: space-between; align-items: center; }
+.btn {
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+  border: none; cursor: pointer; border-radius: 100px;
+  transition: all .2s; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-primary { background: var(--bronze); color: white; padding: 12px 28px; box-shadow: 0 2px 12px rgba(196,147,90,.2); }
+.btn-primary:hover { background: var(--bronze-light); transform: translateY(-1px); }
+.btn-primary:disabled { opacity: .35; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-ghost { background: transparent; color: var(--text-light); padding: 12px 14px; }
+.btn-ghost:hover { color: var(--text); }
+
+/* ── RESULTS ── */
+.kit-header { text-align: center; padding: 36px 0 20px; }
+.kit-badge {
+  display: inline-block; font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  background: var(--bronze); color: white;
+  padding: 5px 14px; border-radius: 100px; margin-bottom: 14px;
+}
+.kit-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px; font-weight: 500; color: var(--charcoal-deep); margin-bottom: 6px;
+}
+.kit-header p { font-size: 14px; color: var(--text-mid); }
+
+/* SIZE / ALTITUDE WARNING IN KIT */
+.kit-warning {
+  border-radius: var(--radius); padding: 16px 20px; margin-bottom: 16px;
+}
+.kit-warning.warn { background: var(--warn-bg); border: 1px solid var(--warn-border); }
+.kit-warning.alert { background: var(--alert-bg); border: 1px solid var(--alert-border); }
+.kit-warning.good { background: var(--teal-pale); border: 1px solid var(--teal-border); }
+.kit-warning.info { background: var(--bronze-pale); border: 1px solid var(--bronze-border); }
+.kw-label {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 6px; font-weight: 500;
+}
+.kit-warning.warn .kw-label { color: var(--bronze); }
+.kit-warning.alert .kw-label { color: var(--alert-text); }
+.kit-warning.good .kw-label { color: var(--teal); }
+.kit-warning.info .kw-label { color: var(--bronze); }
+.kit-warning p { font-size: 13px; line-height: 1.6; }
+.kit-warning.warn p { color: #7a5520; }
+.kit-warning.alert p { color: var(--alert-text); }
+.kit-warning.good p { color: #2a7a8a; }
+.kit-warning.info p { color: var(--charcoal); }
+
+/* ANCHOR QUESTION */
+.anchor-question {
+  background: var(--charcoal-deep); border-radius: var(--radius);
+  padding: 28px 32px; margin-bottom: 20px; text-align: center;
+}
+.anchor-question .aq-label {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,0.4); margin-bottom: 10px;
+}
+.anchor-question h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(22px, 4vw, 30px); font-weight: 400;
+  color: white; font-style: italic; line-height: 1.3;
+}
+
+/* DR J QUOTE */
+.drj-quote {
+  border-left: 3px solid var(--bronze); padding: 18px 22px; margin-bottom: 18px;
+  background: var(--white); border-radius: 0 var(--radius) var(--radius) 0;
+}
+.drj-quote blockquote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px; font-weight: 400; color: var(--charcoal-deep);
+  line-height: 1.65; font-style: italic; margin-bottom: 8px;
+}
+.drj-quote .attr { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--bronze); }
+
+/* NUDGE */
+.nudge {
+  background: var(--bronze-pale); border: 1px solid var(--bronze-border);
+  border-radius: var(--radius); padding: 16px 20px; margin-bottom: 18px;
+}
+.nudge-lbl {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--bronze); margin-bottom: 6px;
+}
+.nudge p { font-size: 14px; color: var(--charcoal-deep); line-height: 1.65; font-style: italic; }
+
+/* SECTIONS */
+.section {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius); margin-bottom: 14px; overflow: hidden;
+}
+.sec-head {
+  padding: 15px 20px 12px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.sec-head h3 { font-size: 14px; font-weight: 500; color: var(--charcoal-deep); }
+.sec-head p { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+.sec-body { padding: 14px 20px; }
+
+/* TIMER */
+.launch-btn {
+  background: var(--charcoal-deep); color: white; border: none;
+  border-radius: 100px; padding: 10px 22px;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; margin-bottom: 16px; transition: background .2s;
+}
+.launch-btn:hover { background: var(--charcoal); }
+.timer-box {
+  display: none; background: var(--warm-gray);
+  border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 16px;
+}
+.timer-current { font-size: 13px; color: var(--text-mid); margin-bottom: 4px; }
+.timer-display {
+  font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 500;
+  color: var(--bronze); margin-bottom: 6px; transition: color .3s;
+}
+.timer-track { height: 3px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 12px; }
+.timer-fill { height: 100%; background: var(--bronze); border-radius: 3px; transition: width 1s linear, background .3s; }
+.timer-controls { display: flex; gap: 8px; align-items: center; }
+@media(max-width:400px) { .timer-controls { flex-wrap: wrap; } .timer-controls button { flex: 1; text-align: center; min-width: 0; } }
+.t-btn-start { background: var(--bronze); color: white; border: none; border-radius: 100px; padding: 8px 18px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; }
+.t-btn-start:hover { background: var(--bronze-light); }
+.t-btn-next { background: var(--teal); color: white; border: none; border-radius: 100px; padding: 8px 16px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; }
+.t-btn-pause { background: transparent; color: var(--text-mid); border: 1px solid var(--border); border-radius: 100px; padding: 7px 14px; font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; }
+
+/* AGENDA */
+.agenda { width: 100%; border-collapse: collapse; }
+.agenda tr { border-bottom: 1px solid var(--warm-gray); }
+.agenda tr:last-child { border-bottom: none; }
+.agenda td { padding: 11px 0; vertical-align: top; }
+.a-time { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--bronze); white-space: nowrap; padding-right: 14px; padding-top: 13px; width: 44px; }
+.a-title { font-size: 13px; font-weight: 500; color: var(--charcoal-deep); margin-bottom: 3px; }
+.a-desc { font-size: 12px; color: var(--text-mid); line-height: 1.5; }
+.a-size-note { font-size: 11px; color: var(--bronze); margin-top: 4px; font-style: italic; }
+.a-dot-col { width: 24px; padding-left: 8px; padding-top: 13px; }
+.a-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); cursor: pointer; transition: background .2s; display: inline-block; }
+.a-dot.active { background: var(--bronze); }
+.a-dot.done { background: var(--teal); }
+
+/* ROLES */
+.roles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media(max-width:480px) { .roles-grid { grid-template-columns: 1fr; } }
+
+.role-card {
+  background: var(--warm-gray); border-radius: var(--radius-sm);
+  padding: 14px 15px; border-left: 3px solid var(--border);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.role-card.essential { border-left-color: var(--charcoal); }
+.role-card.catalyst { border-left-color: var(--bronze); }
+.role-card.combined { border-left-color: var(--teal); grid-column: 1 / -1; }
+
+.role-type { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-light); margin-bottom: 4px; }
+.role-card h4 { font-size: 13px; font-weight: 500; color: var(--charcoal-deep); margin-bottom: 3px; }
+.role-desc { font-size: 11px; color: var(--text-mid); line-height: 1.5; }
+.role-action { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.06); font-size: 11px; color: var(--teal); font-weight: 500; line-height: 1.4; }
+
+/* TECHNIQUES */
+.tech-card { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 13px 15px; margin-bottom: 8px; }
+.tech-card:last-child { margin-bottom: 0; }
+.tech-card h4 { font-size: 13px; font-weight: 500; color: var(--charcoal-deep); margin-bottom: 4px; }
+.tech-card p { font-size: 12px; color: var(--text-mid); line-height: 1.5; }
+.tech-when { font-size: 11px; color: var(--bronze); margin-top: 5px; font-weight: 500; }
+.tech-size-note { font-size: 11px; color: var(--teal); margin-top: 3px; font-style: italic; }
+
+/* REFLECTION */
+.refl-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--warm-gray); font-size: 13px; align-items: baseline; }
+.refl-item:last-child { border-bottom: none; }
+.refl-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--bronze); flex-shrink: 0; }
+
+/* ONBOARD */
+.onboard-tip { background: var(--warm-gray); border-radius: var(--radius-sm); padding: 13px 15px; margin-bottom: 8px; }
+.onboard-tip:last-child { margin-bottom: 0; }
+.onboard-tip strong { display: block; font-size: 12px; font-weight: 500; color: var(--charcoal-deep); margin-bottom: 3px; }
+.onboard-tip p { font-size: 12px; color: var(--text-mid); line-height: 1.55; }
+
+/* KIT NAV */
+.kit-nav {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px;
+  position: sticky; top: 0; z-index: 10;
+  background: var(--cream); padding: 10px 0;
+}
+.kit-nav a {
+  font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px;
+  text-transform: uppercase; text-decoration: none;
+  color: var(--text-mid); background: var(--white);
+  border: 1px solid var(--border); border-radius: 100px;
+  padding: 5px 12px; transition: all .2s; white-space: nowrap;
+}
+.kit-nav a:hover { border-color: var(--bronze); color: var(--bronze); }
+
+@media print { .kit-nav { display: none !important; } }
+
+/* ACTIONS */
+.kit-actions { display: flex; gap: 8px; padding: 20px 0 8px; flex-wrap: wrap; }
+.act-btn { background: var(--white); color: var(--text); border: 1px solid var(--border); border-radius: 100px; padding: 9px 20px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .2s; }
+.act-btn:hover { border-color: var(--bronze); color: var(--bronze); }
+
+/* FOOTER */
+.footer { text-align: center; padding: 24px 0; border-top: 1px solid var(--border); margin-top: 12px; }
+.footer p { font-size: 12px; color: var(--text-light); }
+
+.print-header { display: none; }
+
+@media print {
+  body { background: white; }
+  .header, .progress, .btn-row, .kit-actions, .launch-btn, .timer-box, .footer { display: none !important; }
+  .section { break-inside: avoid; border: 1px solid #ddd; }
+  .kit-header { padding-top: 0; }
+  .wrap { max-width: 100%; padding: 0 12px; }
+  .a-dot-col, .a-dot { display: none !important; }
+  .print-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 2px solid #C4935A; padding-bottom: 8px; margin-bottom: 16px;
+    font-family: 'DM Sans', sans-serif; font-size: 11px; color: #5a5f68;
+  }
+  .print-header strong { color: #252830; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="brand">Syncovate</div>
+    <h1>Meeting Kit Generator</h1>
+    <p>Answer three questions. Walk in with everything you need.</p>
+  </div>
+
+  <div class="progress" id="prog">
+    <span class="progress-label" id="prog-lbl">1 / 3</span>
+    <div class="bar on" data-s="1"></div>
+    <div class="bar" data-s="2"></div>
+    <div class="bar" data-s="3"></div>
+  </div>
+
+  <!-- STEP 1: THE FOUR QUESTIONS -->
+  <div class="step show" id="s1">
+    <div class="step-label">Step 1 of 3</div>
+    <h2>What question is this meeting trying to answer?</h2>
+    <p>Every meeting has one. Pick yours — everything else flows from here.</p>
+    <div class="q-grid">
+      <div class="q-card" role="button" tabindex="0" onclick="selQ('ideation', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selQ('ideation',this)}">
+        <div class="q-altitude">High altitude · Visionary</div>
+        <h3>What could we do?</h3>
+        <p>Open exploration. No constraints yet. You're generating possibilities, not making decisions.</p>
+      </div>
+      <div class="q-card" role="button" tabindex="0" onclick="selQ('decision', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selQ('decision',this)}">
+        <div class="q-altitude">Mid altitude · Strategic</div>
+        <h3>What should we do?</h3>
+        <p>You have options. Now you need discernment — narrowing the field to what's actually worth pursuing.</p>
+      </div>
+      <div class="q-card" role="button" tabindex="0" onclick="selQ('activation', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selQ('activation',this)}">
+        <div class="q-altitude">Mid-low altitude · Tactical</div>
+        <h3>What will we do?</h3>
+        <p>The decision is made. This meeting translates it into names, dates, and owners. Possibility becomes promise.</p>
+      </div>
+      <div class="q-card" role="button" tabindex="0" onclick="selQ('thirty', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selQ('thirty',this)}">
+        <div class="q-altitude">Ground level · Operational</div>
+        <h3>What's our 30/30?</h3>
+        <p>A learning loop. Look back 30 days. Look forward 30 days. Adjust and keep moving.</p>
+      </div>
+    </div>
+    <div class="btn-row">
+      <div></div>
+      <button class="btn btn-primary" id="b1" onclick="goTo(2)" disabled>Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: GROUP SIZE -->
+  <div class="step" id="s2">
+    <div class="step-label">Step 2 of 3</div>
+    <h2>How many people are in the room?</h2>
+    <p>The higher the altitude, the more voices the process can hold. The lower the altitude, the tighter the group needs to be.</p>
+    <div class="size-grid">
+      <div class="size-card" role="button" tabindex="0" onclick="selSize('small', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selSize('small',this)}">
+        <div class="size-num">3–5</div>
+        <div class="size-range">Small group</div>
+        <h3>Tight team</h3>
+        <p>Roles may combine. Conversational structure. Watch for missing perspectives.</p>
+      </div>
+      <div class="size-card" role="button" tabindex="0" onclick="selSize('ideal', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selSize('ideal',this)}">
+        <div class="size-num">6–10</div>
+        <div class="size-range">Ideal range</div>
+        <h3>Sweet spot</h3>
+        <p>Full roles, full toolkit. This is the size the process is designed for.</p>
+      </div>
+      <div class="size-card" role="button" tabindex="0" onclick="selSize('large', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selSize('large',this)}">
+        <div class="size-num">11–15</div>
+        <div class="size-range">Larger group</div>
+        <h3>Works for some</h3>
+        <p>High altitude meetings handle this well. Lower altitude meetings start to strain.</p>
+      </div>
+    </div>
+    <div class="compat-note" id="compat-note"></div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="goTo(1)">← Back</button>
+      <button class="btn btn-primary" id="b2" onclick="goTo(3)" disabled>Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: EXPERIENCE -->
+  <div class="step" id="s3">
+    <div class="step-label">Step 3 of 3</div>
+    <h2>Has your team used structured meeting roles before?</h2>
+    <p>This adjusts how much guidance your kit includes.</p>
+    <div class="fam-grid">
+      <div class="fam-card" role="button" tabindex="0" onclick="selFam('new', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selFam('new',this)}">
+        <h3>Never tried it</h3>
+        <p>Explain everything. We're starting from scratch.</p>
+      </div>
+      <div class="fam-card" role="button" tabindex="0" onclick="selFam('some', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selFam('some',this)}">
+        <h3>Sometimes</h3>
+        <p>We've used structure before but it's not consistent yet.</p>
+      </div>
+      <div class="fam-card" role="button" tabindex="0" onclick="selFam('experienced', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selFam('experienced',this)}">
+        <h3>Yes, regularly</h3>
+        <p>We know the basics. Give us the essentials.</p>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="goTo(2)">← Back</button>
+      <button class="btn btn-primary" id="b3" onclick="buildKit()" disabled>Build my kit →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="step" id="res"></div>
+
+</div>
+
+<script>
+const ST = { q: null, size: null, fam: null };
+
+/* ── SIZE + QUESTION COMPATIBILITY ── */
+const COMPAT = {
+  ideation: {
+    small: { type: 'warn', label: 'Watch for missing voices', msg: "Ideation benefits from diverse perspectives. With 3–5 people, ask: who isn't in this room who should be? A small group generates fewer unexpected ideas. Consider whether you can bring more voices in — even asynchronously before the meeting." },
+    ideal: { type: 'good', label: 'Ideal combination', msg: "7 ± 2 is the sweet spot for ideation. You have enough diversity to generate unexpected connections without the logistics overhead of a large group." },
+    large: { type: 'good', label: 'This works well', msg: "High altitude meetings can handle 11–15 people effectively. More voices mean more unexpected connections. Your kit will include techniques designed for larger groups." }
+  },
+  decision: {
+    small: { type: 'good', label: 'Tight and focused', msg: "Decision-making with 3–5 people is clean and direct. You'll move fast. Watch that you have the right perspectives represented — small groups can have blind spots." },
+    ideal: { type: 'good', label: 'Ideal combination', msg: "This is the sweet spot for decision-making. Enough perspectives to stress-test the options, small enough to actually reach a decision." },
+    large: { type: 'warn', label: 'Getting big for this altitude', msg: "Decision-making with 11–15 people starts to strain. People are beginning to split into execution groups at this stage. Consider whether everyone truly needs to be in this room, or whether some should be informed rather than involved." }
+  },
+  activation: {
+    small: { type: 'good', label: 'Built for this', msg: "Activation meetings are for the people doing the work. 3–5 is a natural execution team size. Everyone gets a task. There are no observers." },
+    ideal: { type: 'good', label: 'Ideal combination', msg: "Good size for a kickoff. Everyone can have a named commitment. The recorder can track it all without chaos." },
+    large: { type: 'alert', label: 'This group may be too big', msg: "What will we do meetings work best with the core execution team — typically 7 ± 2. With 11–15 people, you likely have multiple sub-teams who should each run their own activation meeting. Your kit will note where this matters." }
+  },
+  thirty: {
+    small: { type: 'good', label: 'Clean and accountable', msg: "30/30s with 3–5 people are tight, personal, and highly accountable. Every action item gets real attention. This is often the ideal size for a learning loop." },
+    ideal: { type: 'good', label: 'Ideal combination', msg: "Good size for a 30/30. Enough people to have meaningful accountability without the meeting becoming a status report marathon." },
+    large: { type: 'alert', label: 'Consider splitting', msg: "A 30/30 with 11–15 people risks becoming a status report rather than a learning loop. People with action items in sub-groups should ideally run their own 30/30 and have a representative report to the larger group. Your kit will note where to adapt." }
+  }
+};
+
+/* ── MEETING DATA ── */
+const DATA = {
+  ideation: {
+    label: 'Ideation',
+    altitude: 'High altitude · Visionary',
+    anchor: 'What could we do?',
+    getDur: (s) => s === 'small' ? '60 min' : s === 'large' ? '120 min' : '90 min',
+    quote: "At ideation altitude, your job isn't to evaluate ideas — it's to generate them. Protect the creative space. The worst thing you can do is let someone say 'that won't work' before the idea has room to breathe.",
+    nudge: "Before this meeting, tell the group the one rule: no evaluation during generation. Wonder first. Judgment comes later — in a different meeting.",
+    onboard_alt: "generating ideas — not judging them",
+    getAgenda: (s) => {
+      const base = [
+        { t: '5 min',  h: 'One-word opener', d: "Each person shares one word for their current state. Creates psychological safety before the creative work begins.", m: 5 },
+        { t: '10 min', h: 'Set the altitude', d: "Name it out loud: 'We're at ideation altitude — generating possibilities, not making decisions. If someone starts evaluating, I'll redirect us.'", m: 10, sizeNote: { small: "With only 3–5 people, explicitly acknowledge the size: 'We're a small group — let's each push ourselves to surface at least three ideas we wouldn't normally say out loud.'" } },
+        { t: s === 'large' ? '45 min' : '30 min', h: 'Divergent thinking', d: s === 'large' ? 'Use one of the large-group techniques below. Break into pairs or triads first, then reconvene to share. Do not run a full-group round-robin at this size.' : 'Use one of the techniques below — not open brainstorming. Push for volume and novelty over feasibility.', m: s === 'large' ? 45 : 30 },
+        { t: '20 min', h: 'Pattern recognition', d: "Cluster ideas into themes. Ask: 'What's emerging that we didn't expect?' Look for the unexpected connection.", m: 20 },
+        { t: '10 min', h: 'Insight capture', d: 'Document top themes and surprising ideas. Assign someone to distribute a clean summary within 24 hours.', m: 10 },
+        { t: '5 min',  h: 'Who&apos;s missing?', d: "This is the ideation altitude question: who wasn't in this room who should have been? Name them. Schedule the follow-up conversation.", m: 5, sizeNote: { small: "Critical at small group size. Ideation needs diverse perspectives. Commit to a follow-up before you close.", large: "Even with 11–15 people, ask this. More voices in ideation is a feature, not a problem." } },
+        { t: '10 min', h: 'Transition plan', d: "Which ideas move to a 'What should we do?' meeting? Who owns that next conversation? Set the date before you leave the room.", m: 10 }
+      ];
+      return base;
+    },
+    getRoles: (s) => {
+      if (s === 'small') return {
+        essential: [{ n: 'Table Guide + Knowledge Keeper', d: 'Keeps the group at ideation altitude and captures ideas. Combined for small groups.', a: 'Watch for self-editing — people second-guessing their own ideas before saying them. Interrupt it.', combined: true }],
+        catalyst: [{ n: 'The Timekeeper', d: 'Sets visible timers. Gives 2-minute warnings before each segment ends.', a: 'Keep energy high. Transitions matter more than extra time on any one section.' }]
+      };
+      if (s === 'large') return {
+        essential: [
+          { n: 'Table Guide', d: 'Keeps altitude. Redirects evaluation. Manages subgroup transitions.', a: "With this group size, you'll need to actively move people in and out of subgroup work. Plan those transitions in advance." },
+          { n: 'Knowledge Keeper', d: 'Captures themes across subgroups. Consolidates before the pattern recognition segment.', a: 'Consider assigning a note-taker in each subgroup who reports to the Knowledge Keeper.' },
+          { n: 'Timekeeper', d: 'Manages subgroup timing. Calls the full group back together.', a: 'Set a visible timer everyone can see. With 11+ people, transitions take longer than you expect.' }
+        ],
+        catalyst: [
+          { n: 'The Wonderer', d: "Asks the big 'what if?' questions. Keeps the group exploring rather than converging.", a: "With a large group, actively watch for the dominant voice. Protect quieter ideas." },
+          { n: 'The Amplifier', d: "Ensures quieter voices get airtime across subgroups.", a: "Do this: 'We haven't heard from this side of the room — what's emerging over there?'" }
+        ]
+      };
+      return {
+        essential: [
+          { n: 'Table Guide', d: 'Keeps discussion at ideation altitude. Redirects evaluation the moment it surfaces.', a: "Say this when it happens: 'That's a great evaluation thought — let's hold it for the decision meeting. What other possibilities haven't we named yet?'" },
+          { n: 'Knowledge Keeper', d: 'Captures ideas as they surface. Groups themes in real time. Distributes notes within 24 hours.', a: 'Write everything down — including the half-formed ideas. Those often become the most interesting.' },
+          { n: 'Timekeeper', d: 'Manages transitions. Gives 2-minute warnings.', a: 'Set a visible timer the whole room can see.' }
+        ],
+        catalyst: [
+          { n: 'The Wonderer', d: "Asks the big 'what if?' and 'why not?' questions. Keeps the group in exploration mode.", a: "Watch for self-editing. When someone says 'this might be a dumb idea' — that's your cue to lean in." },
+          { n: 'The Amplifier', d: "Ensures quieter voices get airtime.", a: "Do this: 'We haven't heard from everyone — [name], what are you thinking?'" }
+        ]
+      };
+    },
+    getTech: (s) => {
+      const all = [
+        { n: 'Brainwriting 6-3-5', d: '6 people write 3 ideas in 5 minutes, then pass the sheet. Each person builds on others. No groupthink. No domination.', w: 'Best when you have strong voices in the room or want true equal contribution.', sizes: ['ideal'] },
+        { n: 'Reverse brainstorming', d: "Ask 'How could we make this worse?' then flip each answer. Breaks through stuck thinking.", w: 'Best when the group keeps recycling the same ideas.', sizes: ['small', 'ideal', 'large'] },
+        { n: 'Pair and share', d: 'Each pair generates ideas independently for 10 minutes, then shares with the full group. Prevents anchoring on the first idea stated.', w: 'Best for larger groups where round-robin breaks down.', sizes: ['ideal', 'large'] },
+        { n: 'Starbursting', d: "Generate questions — who, what, where, when, why, how — instead of answers. Explore the problem space before jumping to solutions.", w: "Best when the problem itself isn't well-defined yet.", sizes: ['small', 'ideal'] },
+        { n: 'Gallery walk', d: 'Post themes on the wall. Each person walks and adds ideas silently with sticky notes. Reconvene to discuss clusters.', w: 'Best for large groups — eliminates the round-robin problem entirely.', sizes: ['large'] }
+      ];
+      return all.filter(t => t.sizes.includes(s));
+    },
+    refl: [
+      'Did we stay at ideation altitude, or did evaluation creep in?',
+      'Who contributed the most unexpected idea? Did every voice get heard?',
+      'What themes emerged that surprised us?',
+      'Who was missing from this room? When will we get their perspective?',
+      "Is the transition to 'What should we do?' scheduled?"
+    ]
+  },
+
+  decision: {
+    label: 'Decision-Making',
+    altitude: 'Mid altitude · Strategic',
+    anchor: 'What should we do?',
+    getDur: (s) => s === 'small' ? '45 min' : s === 'large' ? '90 min' : '60 min',
+    quote: "Decision-making altitude is where good ideas get sharpened into real priorities. Your job is to create just enough productive tension that the team evaluates honestly — without killing momentum. Push them to choose, not just discuss.",
+    nudge: "Open by stating the decision method out loud before discussion begins: 'We're using the 2×2 matrix today — the top option becomes our commitment.' When people know the rules upfront, the conversation stays honest.",
+    onboard_alt: "evaluating and choosing — not generating new ideas",
+    getAgenda: (s) => [
+      { t: '5 min',  h: 'Set the altitude', d: "State it clearly: 'Today we're choosing, not generating. New ideas go in the Parking Lot — we'll bring them to a future ideation meeting.'", m: 5 },
+      { t: s === 'large' ? '30 min' : '20 min', h: 'Evaluate options', d: s === 'large' ? 'With this group size, consider breaking into subgroups to evaluate different options simultaneously, then report back. Full-group evaluation of every option at 11+ people is slow and susceptible to anchoring.' : 'Present the ideas on the table. Score against clear criteria: impact, feasibility, strategic alignment. No vague impressions.', m: s === 'large' ? 30 : 20, sizeNote: { large: "With 11–15 people, ask: does everyone truly need to be in this decision? Or should the execution team (5–7 people) make this call with broader input already captured?" } },
+      { t: '15 min', h: 'Prioritize', d: "Use one of the decision tools below. Force a choice — 'let's keep all of them' is not a decision.", m: 15 },
+      { t: '15 min', h: 'Define the outcome', d: "For the top priority: paint a vivid word picture of success. What will we see? What will be different? What are the measurable characteristics? This ensures everyone's imagining the same thing.", m: 15 },
+      { t: '5 min',  h: 'Transition to action', d: "Schedule the activation meeting before you leave. Who is the execution team? Decisions without commitment dates disappear.", m: 5, sizeNote: { large: "The activation meeting should be smaller — the execution team only. Name who's in that room before you close." } }
+    ],
+    getRoles: (s) => {
+      if (s === 'small') return {
+        essential: [{ n: 'Table Guide + Knowledge Keeper', d: 'Keeps altitude, captures decisions, manages the decision tool. Combined for small groups.', a: 'Your biggest job: keep the group from looping. When a decision is made, say it out loud and move on.', combined: true }],
+        catalyst: [{ n: 'The Timekeeper', d: 'Manages transitions. Visible timer at all times.', a: 'Small groups lose time to tangents. Guard the clock.' }]
+      };
+      return {
+        essential: [
+          { n: 'Table Guide', d: 'Keeps the group at decision altitude. Calls the question when the group has enough information to decide.', a: "Say this: 'We have enough to make a call. Let's decide.' Then shut up and wait." },
+          { n: 'Knowledge Keeper', d: 'Captures decisions, criteria used, and what was set aside. Distributes within 4 hours.', a: 'Record not just what was decided but why. Future you will need that context.' },
+          { n: 'Timekeeper', d: 'Manages transitions. Prevents over-deliberation on any one option.', a: 'Give a 2-minute warning before moving to the vote. This focuses the last conversation.' }
+        ],
+        catalyst: [
+          { n: 'The Provoker', d: "Challenges assumptions. Plays devil's advocate. Guards against premature consensus.", a: "Ask this: 'What's the strongest argument against this option?'" },
+          { n: 'The Discerner', d: "Applies critical evaluation. Surfaces what's being assumed.", a: "Ask this: 'What evidence do we have? What are we treating as fact that's actually an assumption?'" }
+        ]
+      };
+    },
+    getTech: (s) => [
+      { n: '2×2 matrix (Big Easy)', d: 'Rate each option on impact (1–5) and ease of implementation (1–5). Highest combined score is your Big Easy — highest impact, most doable. Everyone votes simultaneously.', w: 'Best when you need to weigh tradeoffs and want to start with a win.' },
+      { n: 'Dot voting', d: s === 'large' ? 'Each person gets 3–5 dots to allocate across options. For larger groups, use digital dot voting or colored markers to keep it manageable.' : 'Each person gets 3–5 dots to allocate across options. Simple, visual, democratic — prevents the loudest voice from winning.', w: 'Best for narrowing a long list quickly.' },
+      { n: 'Weighted criteria scoring', d: 'Score each option against 3–5 criteria (strategic alignment, resources, timeline, risk). More rigorous, leaves a documented record.', w: 'Best for high-stakes decisions that need documentation or stakeholder buy-in.' }
+    ],
+    refl: [
+      'Did we use clear criteria, or did we default to the loudest voice?',
+      'Were any options dismissed without fair consideration?',
+      'Does the chosen priority have measurable characteristics of success?',
+      'Did anyone try to reopen ideation? How did we handle it?',
+      'Is the activation meeting scheduled with the right (smaller) team?'
+    ]
+  },
+
+  activation: {
+    label: 'Kickoff / Activation',
+    altitude: 'Mid-low altitude · Tactical',
+    anchor: 'What will we do?',
+    getDur: (s) => '55 min',
+    quote: "The kickoff is a commitment ceremony, not a planning session. The decision is already made. Your job is to translate it into specific promises — named owners, concrete next steps, hard deadlines. Possibility becomes promise in this room.",
+    nudge: "End with a round-robin: each person states their one commitment out loud while the recorder captures it. No one leaves without a named action and a deadline. 'I'll look into it' is not a commitment.",
+    onboard_alt: "making commitments — the decision is already made",
+    getAgenda: (s) => [
+      { t: '5 min',  h: 'Set the altitude', d: "Remind everyone: 'The decision is made. We're not re-opening it today. We're here to commit to specific actions.'", m: 5, sizeNote: { large: "With 11–15 people, open by naming this explicitly: 'Everyone in this room should leave with a specific action. If you're not doing anything in the next 30 days, you may be in the wrong meeting.'" } },
+      { t: '10 min', h: 'Review the outcome', d: 'Briefly confirm the agreed outcome and what success looks like. If there is confusion about the destination, surface it now — not mid-execution.', m: 10 },
+      { t: s === 'large' ? '30 min' : '20 min', h: 'Build the action plan', d: s === 'large' ? 'With 11–15 people, split into sub-teams around logical work areas. Each sub-team builds their own action plan. Reconvene to share commitments.' : 'For each action item: specific next step, named owner, hard deadline. Go person to person. Ask: "What can you do in the next 30 days with one hour of your time?"', m: s === 'large' ? 30 : 20 },
+      { t: '10 min', h: 'Identify first obstacles', d: 'What is most likely to slow this down? Name it now. Assign someone to watch for it. Prevention is faster than recovery.', m: 10 },
+      { t: '5 min',  h: 'Schedule the 30/30', d: s === 'large' ? 'Sub-teams should schedule their own 30/30 meetings. The core team 30/30 should be a smaller group — 7 or fewer. Set those dates now.' : 'Set the date for your first 30/30 before you leave. The habit of reconvening is more important than the perfect date.', m: 5 },
+      { t: '5 min',  h: 'Commitment close', d: 'Each person states their commitment out loud. Recorder reads them back. Everyone hears it. That is the close.', m: 5 }
+    ],
+    getRoles: (s) => {
+      const base = {
+        essential: [
+          { n: 'Table Guide', d: 'Keeps altitude. The decision is made — the Table Guide redirects any attempt to re-open it.', a: "Say this: 'That's worth discussing — schedule a separate meeting. Right now, what's your commitment?'" },
+          { n: 'Knowledge Keeper', d: 'Captures every action item with all four elements: who, what, deliverable, by when. Distributes within 4 hours.', a: 'Non-negotiable: if any element is missing, stop and get it. An incomplete action item will not get done.' },
+          { n: 'Timekeeper', d: 'Manages transitions. Prevents the action planning segment from running over.', a: 'Set a visible timer. The commitment close is the most important part — protect its time.' }
+        ],
+        catalyst: [
+          { n: 'The Enabler', d: 'Identifies what people need to succeed and surfaces barriers before they become blockers.', a: "Ask this: 'What would make this easier for you to actually get done?'" },
+          { n: 'The Tenacity Driver', d: 'Holds the group accountable to specificity. Vague commitments do not get past this role.', a: "Ask this: 'What specifically will be done, by whom, by when — and what's the deliverable?'" }
+        ]
+      };
+      if (s === 'small') {
+        base.essential = [{ n: 'Table Guide + Knowledge Keeper', d: 'Keeps altitude and captures all commitments. Combined for small groups.', a: 'With 3–5 people, go person to person for commitments. Name each person. Make eye contact. \"What\'s yours?\"', combined: true }];
+      }
+      return base;
+    },
+    getTech: (s) => [
+      { n: 'Who / What / Deliverable / By When', d: 'The only format for action items that works. Every item needs all four. Anything missing is incomplete — it will not get done.', w: 'Use for every single action item. No exceptions.' },
+      { n: 'The one-hour ask', d: "Ask: 'What can you do with one hour of your time in the next 30 days?' Small asks build the habit of follow-through. Bigger asks get avoided.", w: 'Best when workloads are heavy or the team is new to structured accountability.' },
+      { n: 'Parking Lot', d: 'Capture ideas or scope expansions that surface during the kickoff. They are not ignored — they go in the Parking Lot and get scheduled for a future ideation meeting.', w: 'Kickoffs always surface new ideas. This is how you honor them without losing momentum.' }
+    ],
+    refl: [
+      'Does every action item have a specific owner, deliverable, and deadline?',
+      'Are the commitments realistic given current workloads?',
+      'Did anyone leave without a task? There are no observers in this meeting.',
+      'Is the first 30/30 scheduled — with the right, smaller group?',
+      'Did the Knowledge Keeper distribute the action plan within 4 hours?'
+    ]
+  },
+
+  thirty: {
+    label: '30/30',
+    altitude: 'Ground level · Operational',
+    anchor: "What's our 30/30?",
+    getDur: (s) => s === 'large' ? '60 min' : '45 min',
+    quote: "The 30/30 is a learning loop, not a status report. Look back 30 days at what happened and what you learned. Look forward 30 days at what adjusts. Keep the pace. Keep moving. The habit of reconvening builds more trust than any single meeting.",
+    nudge: "Start with a quick round: each person shares what they completed and one thing they learned. Then move immediately to forward commitments. This is not a place for war stories about what didn't work — that's a different conversation.",
+    onboard_alt: "reviewing progress and adjusting — not re-opening decisions",
+    getAgenda: (s) => [
+      { t: '5 min',  h: 'Quick connect', d: 'One word each for how things are going. Grounds the group before diving in.', m: 5 },
+      { t: s === 'large' ? '20 min' : '15 min', h: 'What did we learn in the last 30 days?', d: s === 'large' ? 'With 11–15 people, consider having sub-team leads report rather than individuals. One report per work area, not per person — or this becomes a marathon.' : "Each person reports on their action item: done, in progress, or blocked. Be honest — pretending something happened when it didn't breaks trust.", m: s === 'large' ? 20 : 15, sizeNote: { large: "If everyone reports individually, a 15-person 30/30 takes 45 minutes just on lookbacks. Sub-team reporting is not optional at this size." } },
+      { t: '10 min', h: 'Are there new assets or information?', d: "Has anything surfaced in the last 30 days — new people, new resources, new constraints — that should affect direction? This is where the learning loop pays off.", m: 10 },
+      { t: '10 min', h: 'Is our course still right?', d: "Is the outcome still the right one? Do the metrics still make sense? Strategic Doing is built as a series of experiments — a dead end is data, not failure.", m: 10 },
+      { t: s === 'large' ? '15 min' : '10 min', h: 'Next 30-day commitments', d: s === 'large' ? 'Sub-teams set their own next-cycle commitments. Each sub-team lead captures and reports. Then set the date for the next 30/30 — for the right group size.' : 'Each person commits to one specific action in the next 30 days. Who, what, deliverable, by when.', m: s === 'large' ? 15 : 10 }
+    ],
+    getRoles: (s) => {
+      if (s === 'small') return {
+        essential: [{ n: 'Table Guide + Knowledge Keeper', d: 'Keeps altitude and captures commitments. With 3–5 people this is usually the same person.', a: "With a small group, the 30/30 can feel too casual. Keep the structure — it's what makes it a learning loop rather than a check-in.", combined: true }],
+        catalyst: [{ n: 'The Timekeeper', d: 'Keeps the group moving. Small 30/30s have a tendency to run long on the lookback.', a: "Give the lookback segment a hard stop. Forward momentum is the point." }]
+      };
+      return {
+        essential: [
+          { n: 'Table Guide', d: 'Keeps the group at ground altitude. Redirects drift into strategy or re-opening decisions.', a: "Redirect like this: 'That's an important question for a different meeting. Right now — what's your next 30-day commitment?'" },
+          { n: 'Knowledge Keeper', d: 'Tracks what everyone committed to. Distributes the updated action plan within 4 hours. Sends the nudge at 2 weeks.', a: 'Non-negotiable: every commitment needs a name and a date.' },
+          { n: 'Timekeeper', d: 'Guards the pace. This is the meeting most likely to run over on lookback and cut forward commitments.', a: 'The forward commitment segment is the most important part of the 30/30. Protect it.' }
+        ],
+        catalyst: [
+          { n: 'The Nudge', d: 'Follows up with team members between 30/30s. Not to police — to support.', a: "'[Name], how is [specific task] coming? Anything blocking you? Can I move something?' Personal nudges work. Group reminders don't." }
+        ]
+      };
+    },
+    getTech: (s) => [
+      { n: 'The four 30/30 questions', d: "Run them every time, in order: What did we learn? Are there new assets? Is our course still right? What's the next 30-day commitment? The consistency is the point.", w: 'Use this exact structure every 30/30. The ritual builds trust.' },
+      { n: 'Variable cycles', d: "30 days is a good default. In turbulent environments, shorten: 14/14 or 7/7. In stable, slow-moving work, extend: 60/60. Match the cycle to your pace of change.", w: 'Review cycle length at the end of each 30/30.' },
+      { n: 'Sub-team reporting (large groups)', d: 'Each sub-team lead reports on behalf of their group: what was completed, what was learned, what the next commitment is. Prevents the 30/30 from becoming a 90-minute status meeting.', w: s === 'large' ? 'Essential at 11–15 people.' : 'Consider this as the group grows beyond 8–9 people.' }
+    ],
+    refl: [
+      'Did we stay at ground altitude, or did we drift into strategy or decisions?',
+      'Was every action item from last cycle reported on honestly?',
+      'Does anything need to be escalated to a different meeting type?',
+      'Are forward commitments specific enough to actually happen?',
+      'Is the next 30/30 scheduled — with the right group?'
+    ]
+  }
+};
+
+let timerInterval = null, timerSecs = 0, timerRunning = false, curItem = 0, agItems = [];
+
+function selQ(v, el) {
+  ST.q = v;
+  document.querySelectorAll('.q-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('b1').disabled = false;
+  if (ST.size) updateCompat();
+}
+
+function selSize(v, el) {
+  ST.size = v;
+  document.querySelectorAll('.size-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('b2').disabled = false;
+  updateCompat();
+}
+
+function updateCompat() {
+  const note = document.getElementById('compat-note');
+  if (!ST.q || !ST.size) { note.style.display = 'none'; return; }
+  const c = COMPAT[ST.q][ST.size];
+  note.className = 'compat-note ' + c.type;
+  note.innerHTML = `<div class="compat-label">${c.label}</div>${c.msg}`;
+  note.style.display = 'block';
+}
+
+function selFam(v, el) {
+  ST.fam = v;
+  document.querySelectorAll('.fam-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('b3').disabled = false;
+}
+
+function goTo(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('show'));
+  const el = document.getElementById('s' + n) || document.getElementById('res');
+  if (el) el.classList.add('show');
+  document.querySelectorAll('.bar').forEach(b => {
+    const sn = parseInt(b.dataset.s);
+    b.className = 'bar' + (sn < n ? ' done' : sn === n ? ' on' : '');
+  });
+  document.getElementById('prog-lbl').textContent = n + ' / 3';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function fmt(s) { const m = Math.floor(s / 60); const sc = s % 60; return m + ':' + (sc < 10 ? '0' : '') + sc; }
+
+function launchMeeting() {
+  curItem = 0; timerSecs = agItems[0].m * 60;
+  document.getElementById('launch-wrap').style.display = 'none';
+  document.getElementById('timer-box').style.display = 'block';
+  document.getElementById('t-dot-0').classList.add('active');
+  document.getElementById('t-current').textContent = agItems[0].h;
+  document.getElementById('t-display').textContent = fmt(timerSecs);
+  document.getElementById('t-fill').style.width = '100%';
+}
+function startTimer() {
+  if (timerRunning) return; timerRunning = true;
+  timerInterval = setInterval(() => {
+    if (timerSecs > 0) {
+      timerSecs--;
+      const pct = Math.round((timerSecs / (agItems[curItem].m * 60)) * 100);
+      document.getElementById('t-display').textContent = fmt(timerSecs);
+      document.getElementById('t-fill').style.width = pct + '%';
+      if (timerSecs === 60) document.getElementById('t-display').style.color = '#56ADBF';
+    } else {
+      clearInterval(timerInterval); timerRunning = false;
+      document.getElementById('t-display').textContent = 'Time!';
+    }
+  }, 1000);
+}
+function pauseTimer() { clearInterval(timerInterval); timerRunning = false; }
+function nextItem() {
+  clearInterval(timerInterval); timerRunning = false;
+  const prev = document.getElementById('t-dot-' + curItem);
+  if (prev) { prev.classList.remove('active'); prev.classList.add('done'); }
+  if (curItem < agItems.length - 1) {
+    curItem++; timerSecs = agItems[curItem].m * 60;
+    const dot = document.getElementById('t-dot-' + curItem);
+    if (dot) dot.classList.add('active');
+    document.getElementById('t-current').textContent = agItems[curItem].h;
+    document.getElementById('t-display').textContent = fmt(timerSecs);
+    document.getElementById('t-display').style.color = '#C4935A';
+    document.getElementById('t-fill').style.width = '100%';
+    document.getElementById('t-fill').style.background = '#C4935A';
+  } else {
+    document.getElementById('t-current').textContent = 'Meeting complete';
+    document.getElementById('t-display').textContent = 'Done!';
+    document.getElementById('t-display').style.color = '#56ADBF';
+    document.getElementById('t-fill').style.background = '#56ADBF';
+    document.getElementById('t-controls').innerHTML = '';
+  }
+}
+
+function buildKit() {
+  const d = DATA[ST.q];
+  const s = ST.size;
+  const isNew = ST.fam === 'new';
+  const dur = d.getDur(s);
+  agItems = d.getAgenda(s);
+  const roles = d.getRoles(s);
+  const tech = d.getTech(s);
+  const compat = COMPAT[ST.q][s];
+
+  const sizeLabel = s === 'small' ? '3–5 people' : s === 'ideal' ? '6–10 people' : '11–15 people';
+
+  const printDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  let h = `
+  <div class="print-header">
+    <span><strong>Syncovate</strong> · ${d.label} Meeting Kit · ${sizeLabel}</span>
+    <span>Generated ${printDate}</span>
+  </div>
+  <div class="kit-header">
+    <div class="kit-badge">${d.altitude}</div>
+    <h2>${d.label} Meeting Kit</h2>
+    <p>${dur} &nbsp;·&nbsp; ${sizeLabel}</p>
+  </div>`;
+
+  // Size + altitude signal
+  h += `<div class="kit-warning ${compat.type}">
+    <div class="kw-label">${compat.label}</div>
+    <p>${compat.msg}</p>
+  </div>`;
+
+  h += `<div class="anchor-question">
+    <div class="aq-label">The question this meeting answers</div>
+    <h3>${d.anchor}</h3>
+  </div>
+
+  <div class="drj-quote">
+    <blockquote>${d.quote}</blockquote>
+    <div class="attr">— Dr. J, Syncovate</div>
+  </div>
+
+  <div class="nudge">
+    <div class="nudge-lbl">Dr. J's move for this meeting</div>
+    <p>${d.nudge}</p>
+  </div>`;
+
+  // Section nav
+  h += `<div class="kit-nav">
+    <a href="#kit-agenda">Agenda</a>
+    <a href="#kit-roles">Roles</a>
+    <a href="#kit-techniques">Techniques</a>
+    <a href="#kit-reflection">Reflection</a>
+  </div>`;
+
+  if (isNew) {
+    h += `<div class="section">
+      <div class="sec-head"><div><h3>Before you start</h3><p>First time with structured meetings</p></div></div>
+      <div class="sec-body">
+        <div class="onboard-tip"><strong>Send this kit 24 hours ahead</strong><p>Frame it as an experiment: "We're trying a new format and we'll debrief after." This reduces resistance before anyone walks in the door.</p></div>
+        <div class="onboard-tip"><strong>Assign roles before the room fills up</strong><p>Don't ask for volunteers in the moment. People show up differently when they know their role ahead of time.</p></div>
+        <div class="onboard-tip"><strong>Name the altitude out loud at the start</strong><p>"Today we're answering '${d.anchor}' — that means we're focused on ${d.onboard_alt}. If we drift, I'll redirect us."</p></div>
+      </div>
+    </div>`;
+  }
+
+  // AGENDA
+  h += `<div class="section" id="kit-agenda">
+    <div class="sec-head"><div><h3>Agenda · ${dur}</h3><p>Click dots to track · Start meeting to run the live timer</p></div></div>
+    <div class="sec-body">
+      <div id="launch-wrap" style="margin-bottom:16px">
+        <button class="launch-btn" onclick="launchMeeting()">▶ Start this meeting</button>
+      </div>
+      <div class="timer-box" id="timer-box">
+        <div class="timer-current" id="t-current">—</div>
+        <div class="timer-display" id="t-display">0:00</div>
+        <div class="timer-track"><div class="timer-fill" id="t-fill" style="width:100%"></div></div>
+        <div class="timer-controls" id="t-controls">
+          <button class="t-btn-start" onclick="startTimer()">Start timer</button>
+          <button class="t-btn-next" onclick="nextItem()">Next item →</button>
+          <button class="t-btn-pause" onclick="pauseTimer()">Pause</button>
+        </div>
+      </div>
+      <table class="agenda">
+        ${agItems.map((a, i) => {
+          const sn = a.sizeNote && a.sizeNote[s] ? `<div class="a-size-note">↳ ${a.sizeNote[s]}</div>` : '';
+          return `<tr>
+            <td class="a-time">${a.t}</td>
+            <td><div class="a-title">${a.h}</div><div class="a-desc">${a.d}</div>${sn}</td>
+            <td class="a-dot-col"><div class="a-dot" id="t-dot-${i}" onclick="this.classList.toggle('done')"></div></td>
+          </tr>`;
+        }).join('')}
+      </table>
+    </div>
+  </div>`;
+
+  // ROLES
+  const allRoles = [...(roles.essential || []), ...(roles.catalyst || [])];
+  h += `<div class="section" id="kit-roles">
+    <div class="sec-head"><div><h3>Role cards</h3><p>${s === 'small' ? 'Streamlined for small group' : 'Assign before the meeting starts'}</p></div></div>
+    <div class="sec-body">
+      <div class="roles-grid">
+        ${(roles.essential || []).map(r => `<div class="role-card ${r.combined ? 'combined' : 'essential'}">
+          <div class="role-type">${r.combined ? 'Combined role' : 'Essential'}</div>
+          <h4>${r.n}</h4>
+          <div class="role-desc">${r.d}</div>
+          ${r.a ? `<div class="role-action">${r.a}</div>` : ''}
+        </div>`).join('')}
+        ${(roles.catalyst || []).map(r => `<div class="role-card catalyst">
+          <div class="role-type">Catalyst · ${d.label}</div>
+          <h4>${r.n}</h4>
+          <div class="role-desc">${r.d}</div>
+          ${r.a ? `<div class="role-action">${r.a}</div>` : ''}
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+
+  // TECHNIQUES
+  const techLabel = ST.q === 'ideation' ? 'Techniques — not open brainstorming' :
+                    ST.q === 'decision' ? 'Decision-making tools' :
+                    ST.q === 'activation' ? 'Commitment tools' : 'Learning loop tools';
+  h += `<div class="section" id="kit-techniques">
+    <div class="sec-head"><div><h3>${techLabel}</h3><p>Pick one before the meeting starts</p></div></div>
+    <div class="sec-body">
+      ${tech.map(t => `<div class="tech-card"><h4>${t.n}</h4><p>${t.d}</p><div class="tech-when">↳ ${t.w}</div></div>`).join('')}
+    </div>
+  </div>`;
+
+  // REFLECTION
+  h += `<div class="section" id="kit-reflection">
+    <div class="sec-head"><div><h3>Post-meeting reflection</h3><p>Within 24 hours · 10 minutes · Knowledge Keeper leads</p></div></div>
+    <div class="sec-body">
+      ${d.refl.map((q, i) => `<div class="refl-item"><span class="refl-num">${String(i + 1).padStart(2, '0')}</span><span>${q}</span></div>`).join('')}
+    </div>
+  </div>`;
+
+  h += `<div class="kit-actions">
+    <button class="act-btn" onclick="window.print()">🖨 Print this kit</button>
+    <button class="act-btn" onclick="copyKitLink(this)">🔗 Copy link to this kit</button>
+    <button class="act-btn" onclick="resetKit()">↻ Start over</button>
+  </div>
+  <div class="footer"><p>Built by Syncovate · Dr. Shannon Jennings, PsyD, LMHC &nbsp;·&nbsp; Great meetings don't happen by accident.</p></div>`;
+
+  // Update URL hash for sharing
+  history.replaceState(null, '', '#q=' + ST.q + '&s=' + ST.size + '&f=' + ST.fam);
+
+  const res = document.getElementById('res');
+  res.innerHTML = h;
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('show'));
+  res.classList.add('show');
+  document.getElementById('prog').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetKit() {
+  ST.q = null; ST.size = null; ST.fam = null;
+  clearInterval(timerInterval); timerRunning = false; curItem = 0; agItems = [];
+  ['b1','b2','b3'].forEach(id => document.getElementById(id).disabled = true);
+  document.querySelectorAll('.q-card, .size-card, .fam-card').forEach(c => c.classList.remove('sel'));
+  document.getElementById('compat-note').style.display = 'none';
+  document.getElementById('prog').style.display = 'flex';
+  history.replaceState(null, '', location.pathname);
+  goTo(1);
+}
+
+function copyKitLink(btn) {
+  navigator.clipboard.writeText(location.href).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
+}
+
+// Load from URL hash if present
+(function() {
+  const hash = location.hash.slice(1);
+  if (!hash) return;
+  const params = Object.fromEntries(hash.split('&').map(p => p.split('=')));
+  const validQ = ['ideation', 'decision', 'activation', 'thirty'];
+  const validS = ['small', 'ideal', 'large'];
+  const validF = ['new', 'some', 'experienced'];
+  if (validQ.includes(params.q) && validS.includes(params.s) && validF.includes(params.f)) {
+    ST.q = params.q; ST.size = params.s; ST.fam = params.f;
+    buildKit();
+  }
+})();
+</script>
+</body>
+</html>
