@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Syncovate Meeting Kit Generator</title>
-<meta name="description" content="Generate a customized meeting facilitation kit in minutes. Choose your meeting type, group size, and experience level — walk in with everything you need.">
+<meta name="description" content="Build a custom meeting kit — agenda, roles, and techniques — matched to your situation.">
 <meta property="og:title" content="Syncovate Meeting Kit Generator">
-<meta property="og:description" content="Answer three questions. Walk in with everything you need. A structured meeting facilitation tool built on Strategic Doing methodology.">
+<meta property="og:description" content="Build a custom meeting kit — agenda, roles, and techniques — matched to your situation.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Syncovate Meeting Kit Generator">
-<meta name="twitter:description" content="Answer three questions. Walk in with everything you need.">
+<meta name="twitter:description" content="Build a custom meeting kit — agenda, roles, and techniques — matched to your situation.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='%23C4935A'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='white' font-family='serif'>S</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -73,9 +73,9 @@ body {
 .bar.on { background: var(--bronze); }
 .bar.done { background: var(--bronze); }
 
-/* STEPS */
-.step { display: none; }
-.step.show { display: block; animation: up .35s ease; }
+/* SCREENS */
+.screen { display: none; }
+.screen.show { display: block; animation: up .35s ease; }
 @keyframes up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
 .step-label {
@@ -83,12 +83,62 @@ body {
   letter-spacing: 2px; text-transform: uppercase;
   color: var(--text-light); margin-bottom: 8px;
 }
-.step h2 {
+.screen h2 {
   font-family: 'Cormorant Garamond', serif;
   font-size: 24px; font-weight: 500;
   color: var(--charcoal-deep); margin-bottom: 6px;
 }
-.step > p { font-size: 14px; color: var(--text-mid); margin-bottom: 22px; line-height: 1.55; }
+.screen > p { font-size: 14px; color: var(--text-mid); margin-bottom: 22px; line-height: 1.55; }
+
+/* ROUTING INTRO */
+.route-intro { margin-bottom: 32px; }
+.route-intro h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px; font-weight: 500; line-height: 1.35;
+  color: var(--charcoal-deep); margin-bottom: 14px;
+}
+.route-intro p {
+  font-size: 15px; line-height: 1.65; color: var(--text-mid); max-width: 580px;
+}
+.route-prompt {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 500; color: var(--charcoal-deep);
+  margin-bottom: 4px; margin-top: 0;
+}
+
+/* ROUTING CARDS */
+.route-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 8px; }
+@media(max-width:500px) { .route-grid { grid-template-columns: 1fr; } }
+
+.route-card {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s, transform .15s;
+  background: var(--white);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+.route-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--bronze); opacity: 0; transition: opacity .2s;
+}
+.route-card:hover, .route-card:focus-visible { border-color: #c8c4be; transform: translateY(-2px); outline: none; }
+.route-card:hover::before, .route-card:focus-visible::before { opacity: 0.4; }
+.route-card:focus-visible { box-shadow: 0 0 0 2px var(--bronze); }
+.route-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 500;
+  color: var(--charcoal-deep); line-height: 1.2; margin-bottom: 6px;
+}
+.route-card p { font-size: 13px; color: var(--text-mid); line-height: 1.5; }
+.route-cta { margin-top: 28px; text-align: center; }
+.route-cta p { font-size: 14px; color: var(--text-mid); }
+.route-cta a { color: var(--bronze); text-decoration: none; border-bottom: 1px solid rgba(180,150,100,0.3); }
+.route-cta a:hover { border-bottom-color: var(--bronze); }
 
 /* QUESTION CARDS */
 .q-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
@@ -115,6 +165,7 @@ body {
 .q-card:focus-visible { box-shadow: 0 0 0 2px var(--bronze); }
 .q-card.sel { border-color: var(--bronze); background: var(--bronze-pale); }
 .q-card.sel::before { opacity: 1; }
+.q-card.full-width { grid-column: 1 / -1; }
 
 .q-altitude {
   font-family: 'DM Mono', monospace; font-size: 9px;
@@ -128,7 +179,7 @@ body {
 }
 .q-card p { font-size: 12px; color: var(--text-mid); line-height: 1.5; }
 
-/* SIZE BANDS */
+/* SIZE CARDS */
 .size-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 28px; }
 @media(max-width:500px) { .size-grid { grid-template-columns: 1fr; } }
 
@@ -162,7 +213,7 @@ body {
 .size-card h3 { font-size: 13px; font-weight: 500; color: var(--charcoal-deep); margin-bottom: 4px; }
 .size-card p { font-size: 11px; color: var(--text-mid); line-height: 1.45; }
 
-/* SIZE + QUESTION COMPATIBILITY NOTE */
+/* COMPAT NOTE */
 .compat-note {
   border-radius: var(--radius-sm); padding: 12px 16px;
   margin-bottom: 28px; font-size: 13px; line-height: 1.55;
@@ -173,13 +224,12 @@ body {
 .compat-note.good { background: var(--teal-pale); border: 1px solid var(--teal-border); color: #2a7a8a; }
 .compat-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; font-weight: 500; }
 
-/* FAMILIARITY */
-.fam-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 28px; }
-@media(max-width:500px) { .fam-grid { grid-template-columns: 1fr; } }
+/* FAMILIARITY / SUPPORT CARDS */
+.fam-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 28px; }
 
 .fam-card {
   border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 16px; cursor: pointer;
+  padding: 16px 20px; cursor: pointer;
   transition: border-color .2s, background .2s; background: var(--white);
 }
 .fam-card:hover, .fam-card:focus-visible { border-color: #c8c4be; outline: none; }
@@ -187,6 +237,15 @@ body {
 .fam-card.sel { border-color: var(--bronze); background: var(--bronze-pale); }
 .fam-card h3 { font-size: 14px; font-weight: 500; color: var(--charcoal-deep); margin-bottom: 3px; }
 .fam-card p { font-size: 12px; color: var(--text-mid); line-height: 1.45; }
+
+/* RECOMMENDATION NOTE */
+.rec-note {
+  background: var(--bronze-pale); border: 1px solid var(--bronze-border);
+  border-radius: var(--radius-sm); padding: 12px 16px;
+  margin-bottom: 20px; font-size: 13px; line-height: 1.55; color: var(--charcoal);
+  display: none;
+}
+.rec-note strong { color: var(--bronze); }
 
 /* BUTTONS */
 .btn-row { display: flex; justify-content: space-between; align-items: center; }
@@ -201,7 +260,7 @@ body {
 .btn-ghost { background: transparent; color: var(--text-light); padding: 12px 14px; }
 .btn-ghost:hover { color: var(--text); }
 
-/* ── RESULTS ── */
+/* ── KIT OUTPUT ── */
 .kit-header { text-align: center; padding: 36px 0 20px; }
 .kit-badge {
   display: inline-block; font-family: 'DM Mono', monospace;
@@ -215,7 +274,7 @@ body {
 }
 .kit-header p { font-size: 14px; color: var(--text-mid); }
 
-/* SIZE / ALTITUDE WARNING IN KIT */
+/* KIT WARNINGS */
 .kit-warning {
   border-radius: var(--radius); padding: 16px 20px; margin-bottom: 16px;
 }
@@ -354,7 +413,6 @@ body {
 .tech-card h4 { font-size: 13px; font-weight: 500; color: var(--charcoal-deep); margin-bottom: 4px; }
 .tech-card p { font-size: 12px; color: var(--text-mid); line-height: 1.5; }
 .tech-when { font-size: 11px; color: var(--bronze); margin-top: 5px; font-weight: 500; }
-.tech-size-note { font-size: 11px; color: var(--teal); margin-top: 3px; font-style: italic; }
 
 /* REFLECTION */
 .refl-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--warm-gray); font-size: 13px; align-items: baseline; }
@@ -382,8 +440,6 @@ body {
 }
 .kit-nav a:hover { border-color: var(--bronze); color: var(--bronze); }
 
-@media print { .kit-nav { display: none !important; } }
-
 /* ACTIONS */
 .kit-actions { display: flex; gap: 8px; padding: 20px 0 8px; flex-wrap: wrap; }
 .act-btn { background: var(--white); color: var(--text); border: 1px solid var(--border); border-radius: 100px; padding: 9px 20px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .2s; }
@@ -393,11 +449,27 @@ body {
 .footer { text-align: center; padding: 24px 0; border-top: 1px solid var(--border); margin-top: 12px; }
 .footer p { font-size: 12px; color: var(--text-light); }
 
+/* LARGE GROUP PATTERN */
+.lg-pattern {
+  background: var(--bronze-pale); border: 1px solid var(--bronze-border);
+  border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px;
+}
+.lg-pattern .kw-label { color: var(--bronze); }
+.lg-pattern ol { margin: 10px 0 0 18px; font-size: 13px; line-height: 1.7; color: var(--charcoal); }
+.lg-pattern ol strong { color: var(--charcoal-deep); }
+
+.lg-roles {
+  background: var(--teal-pale); border: 1px solid var(--teal-border);
+  border-radius: var(--radius); padding: 16px 20px; margin-bottom: 16px;
+}
+.lg-roles .kw-label { color: var(--teal); }
+.lg-roles ul { margin: 8px 0 0 18px; font-size: 13px; line-height: 1.7; color: var(--charcoal); }
+
 .print-header { display: none; }
 
 @media print {
   body { background: white; }
-  .header, .progress, .btn-row, .kit-actions, .launch-btn, .timer-box, .footer { display: none !important; }
+  .header, .progress, .btn-row, .kit-actions, .launch-btn, .timer-box, .footer, .kit-nav { display: none !important; }
   .section { break-inside: avoid; border: 1px solid #ddd; }
   .kit-header { padding-top: 0; }
   .wrap { max-width: 100%; padding: 0 12px; }
@@ -417,361 +489,895 @@ body {
   <div class="header">
     <div class="brand">Syncovate</div>
     <h1>Meeting Kit Generator</h1>
-    <p>Answer three questions. Walk in with everything you need.</p>
+    <p>Build a custom meeting kit — agenda, roles, and techniques — matched to your situation.</p>
   </div>
 
-  <div class="progress" id="prog">
-    <span class="progress-label" id="prog-lbl">1 / 3</span>
-    <div class="bar on" data-s="1"></div>
-    <div class="bar" data-s="2"></div>
-    <div class="bar" data-s="3"></div>
+  <div class="progress" id="prog" style="display:none">
+    <span class="progress-label" id="prog-lbl">1 / 4</span>
+    <div class="bar" id="bar-1"></div>
+    <div class="bar" id="bar-2"></div>
+    <div class="bar" id="bar-3"></div>
+    <div class="bar" id="bar-4" style="display:none"></div>
   </div>
 
-  <!-- STEP 1: THE FOUR QUESTIONS -->
-  <div class="step show" id="s1">
-    <div class="step-label">Step 1 of 3</div>
-    <h2>What question is this meeting trying to answer?</h2>
-    <p>Every meeting has one. Pick yours — everything else flows from here.</p>
-    <div class="q-grid">
-      <div class="q-card" role="button" tabindex="0" onclick="selQ('ideation', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selQ('ideation',this)}">
-        <div class="q-altitude">High altitude · Visionary</div>
-        <h3>What could we do?</h3>
-        <p>Open exploration. No constraints yet. You're generating possibilities, not making decisions.</p>
+  <!-- ROUTING SCREEN -->
+  <div class="screen show" id="routing">
+    <div class="route-intro">
+      <h2>Meetings don't fail because people don't care. They fail because nobody set them up to work.</h2>
+      <p>Answer a few questions and this tool will generate a ready-to-run meeting kit — a timed agenda, assigned roles, specific techniques, and coaching prompts tailored to what you're actually dealing with. Print it, share the link, or run it on your phone. Takes about 60 seconds.</p>
+    </div>
+    <h3 class="route-prompt">Where do you want to start?</h3>
+    <div class="route-grid">
+      <div class="route-card" role="button" tabindex="0" onclick="choosePath('pain')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();choosePath('pain')}">
+        <h3>Something keeps going wrong in our meetings</h3>
+        <p>Start with the problem. We'll recommend the right meeting structure and build your kit around the fix.</p>
       </div>
-      <div class="q-card" role="button" tabindex="0" onclick="selQ('decision', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selQ('decision',this)}">
-        <div class="q-altitude">Mid altitude · Strategic</div>
-        <h3>What should we do?</h3>
-        <p>You have options. Now you need discernment — narrowing the field to what's actually worth pursuing.</p>
+      <div class="route-card" role="button" tabindex="0" onclick="choosePath('purpose')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();choosePath('purpose')}">
+        <h3>I want to start with the purpose</h3>
+        <p>Pick the type of meeting you need to run. Everything else flows from there.</p>
       </div>
-      <div class="q-card" role="button" tabindex="0" onclick="selQ('activation', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selQ('activation',this)}">
-        <div class="q-altitude">Mid-low altitude · Tactical</div>
-        <h3>What will we do?</h3>
-        <p>The decision is made. This meeting translates it into names, dates, and owners. Possibility becomes promise.</p>
+    </div>
+    <div class="route-cta">
+      <p>Want to talk through your situation with a real person? <a href="mailto:shannon@syncovatellc.com">Reach out — I'd love to help.</a></p>
+    </div>
+  </div>
+
+  <!-- Q0: PAIN (Path A only) -->
+  <div class="screen" id="s-pain">
+    <div class="step-label" id="lbl-pain">Step 1 of 4</div>
+    <h2>What keeps going wrong in your meetings?</h2>
+    <p>Pick the one that hits closest. We'll figure out the right structure from there.</p>
+    <div class="q-grid" id="pain-grid">
+      <div class="q-card" role="button" tabindex="0" data-val="dominant" onclick="selPain('dominant',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selPain('dominant',this)}">
+        <h3>One person runs the show</h3>
+        <p>Same voice, every meeting. Everyone else checks out.</p>
       </div>
-      <div class="q-card" role="button" tabindex="0" onclick="selQ('thirty', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selQ('thirty',this)}">
-        <div class="q-altitude">Ground level · Operational</div>
-        <h3>What's our 30/30?</h3>
-        <p>A learning loop. Look back 30 days. Look forward 30 days. Adjust and keep moving.</p>
+      <div class="q-card" role="button" tabindex="0" data-val="decisions" onclick="selPain('decisions',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selPain('decisions',this)}">
+        <h3>We talk but never decide</h3>
+        <p>Good discussion, no commitments. Same topics, next meeting.</p>
+      </div>
+      <div class="q-card" role="button" tabindex="0" data-val="followup" onclick="selPain('followup',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selPain('followup',this)}">
+        <h3>Nothing happens after</h3>
+        <p>Action items disappear. Nobody's held accountable.</p>
+      </div>
+      <div class="q-card" role="button" tabindex="0" data-val="tangents" onclick="selPain('tangents',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selPain('tangents',this)}">
+        <h3>We go off the rails</h3>
+        <p>One rabbit hole kills the whole hour. We never finish the agenda.</p>
+      </div>
+      <div class="q-card" role="button" tabindex="0" data-val="silence" onclick="selPain('silence',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selPain('silence',this)}">
+        <h3>Half the room is silent</h3>
+        <p>Three people talk. Everyone else just sits there.</p>
+      </div>
+      <div class="q-card" role="button" tabindex="0" data-val="energy" onclick="selPain('energy',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selPain('energy',this)}">
+        <h3>Low energy, everyone's checked out</h3>
+        <p>People show up but they're not really there.</p>
+      </div>
+      <div class="q-card full-width" role="button" tabindex="0" data-val="none" onclick="selPain('none',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selPain('none',this)}">
+        <h3>Meetings are fine — I want to level up</h3>
+        <p>No major issues. Just want meetings that work better.</p>
       </div>
     </div>
     <div class="btn-row">
-      <div></div>
-      <button class="btn btn-primary" id="b1" onclick="goTo(2)" disabled>Continue →</button>
+      <button class="btn btn-ghost" onclick="backToRouting()">← Back</button>
+      <button class="btn btn-primary" id="btn-pain" onclick="goNext()" disabled>Continue →</button>
     </div>
   </div>
 
-  <!-- STEP 2: GROUP SIZE -->
-  <div class="step" id="s2">
-    <div class="step-label">Step 2 of 3</div>
+  <!-- Q1: MEETING PURPOSE -->
+  <div class="screen" id="s-purpose">
+    <div class="step-label" id="lbl-purpose">Step 1 of 3</div>
+    <h2>What do you need this meeting to do?</h2>
+    <p>Pick the purpose. Everything else flows from here.</p>
+    <div class="rec-note" id="rec-note"></div>
+    <div class="q-grid" id="purpose-grid">
+      <div class="q-card" role="button" tabindex="0" data-val="ideation" onclick="selPurpose('ideation',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selPurpose('ideation',this)}">
+        <div class="q-altitude">Wonder & Invention</div>
+        <h3>Explore possibilities</h3>
+        <p>Open exploration. No constraints yet. You're generating possibilities, not making decisions.</p>
+      </div>
+      <div class="q-card" role="button" tabindex="0" data-val="activation" onclick="selPurpose('activation',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selPurpose('activation',this)}">
+        <div class="q-altitude">Discernment & Galvanizing</div>
+        <h3>Choose a direction</h3>
+        <p>You have options. Now you need to narrow the field to what's actually worth pursuing.</p>
+      </div>
+      <div class="q-card" role="button" tabindex="0" data-val="implementation" onclick="selPurpose('implementation',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selPurpose('implementation',this)}">
+        <div class="q-altitude">Execution & Accountability</div>
+        <h3>Turn a decision into action</h3>
+        <p>The decision is made. This meeting turns it into names, dates, and deliverables.</p>
+      </div>
+      <div class="q-card" role="button" tabindex="0" data-val="thirty" onclick="selPurpose('thirty',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selPurpose('thirty',this)}">
+        <div class="q-altitude">Reflection & Recalibration</div>
+        <h3>Review progress and reset</h3>
+        <p>Look back 30 days. Look forward 30 days. Adjust and keep moving.</p>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" id="back-purpose" onclick="goPrev()">← Back</button>
+      <button class="btn btn-primary" id="btn-purpose" onclick="goNext()" disabled>Continue →</button>
+    </div>
+  </div>
+
+  <!-- Q2: GROUP SIZE -->
+  <div class="screen" id="s-size">
+    <div class="step-label" id="lbl-size">Step 2 of 3</div>
     <h2>How many people are in the room?</h2>
-    <p>The higher the altitude, the more voices the process can hold. The lower the altitude, the tighter the group needs to be.</p>
-    <div class="size-grid">
-      <div class="size-card" role="button" tabindex="0" onclick="selSize('small', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selSize('small',this)}">
+    <p>This determines which roles to assign and how to structure participation.</p>
+    <div class="size-grid" id="size-grid">
+      <div class="size-card" role="button" tabindex="0" data-val="small" onclick="selSize('small',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selSize('small',this)}">
         <div class="size-num">3–5</div>
         <div class="size-range">Small group</div>
         <h3>Tight team</h3>
-        <p>Roles may combine. Conversational structure. Watch for missing perspectives.</p>
+        <p>Roles may combine. Watch for missing perspectives.</p>
       </div>
-      <div class="size-card" role="button" tabindex="0" onclick="selSize('ideal', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selSize('ideal',this)}">
-        <div class="size-num">6–10</div>
-        <div class="size-range">Ideal range</div>
+      <div class="size-card" role="button" tabindex="0" data-val="core" onclick="selSize('core',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selSize('core',this)}">
+        <div class="size-num">6–9</div>
+        <div class="size-range">Core team</div>
         <h3>Sweet spot</h3>
         <p>Full roles, full toolkit. This is the size the process is designed for.</p>
       </div>
-      <div class="size-card" role="button" tabindex="0" onclick="selSize('large', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selSize('large',this)}">
-        <div class="size-num">11–15</div>
-        <div class="size-range">Larger group</div>
+      <div class="size-card" role="button" tabindex="0" data-val="large" onclick="selSize('large',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selSize('large',this)}">
+        <div class="size-num">10+</div>
+        <div class="size-range">Large group</div>
         <h3>Works for some</h3>
-        <p>High altitude meetings handle this well. Lower altitude meetings start to strain.</p>
+        <p>Exploring and deciding can work at this size. Execution meetings start to strain.</p>
       </div>
     </div>
     <div class="compat-note" id="compat-note"></div>
     <div class="btn-row">
-      <button class="btn btn-ghost" onclick="goTo(1)">← Back</button>
-      <button class="btn btn-primary" id="b2" onclick="goTo(3)" disabled>Continue →</button>
+      <button class="btn btn-ghost" onclick="goPrev()">← Back</button>
+      <button class="btn btn-primary" id="btn-size" onclick="goNext()" disabled>Continue →</button>
     </div>
   </div>
 
-  <!-- STEP 3: EXPERIENCE -->
-  <div class="step" id="s3">
-    <div class="step-label">Step 3 of 3</div>
-    <h2>Has your team used structured meeting roles before?</h2>
-    <p>This adjusts how much guidance your kit includes.</p>
-    <div class="fam-grid">
-      <div class="fam-card" role="button" tabindex="0" onclick="selFam('new', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selFam('new',this)}">
-        <h3>Never tried it</h3>
-        <p>Explain everything. We're starting from scratch.</p>
+  <!-- Q3: FACILITATION SUPPORT -->
+  <div class="screen" id="s-fam">
+    <div class="step-label" id="lbl-fam">Step 3 of 3</div>
+    <h2>How much guidance do you want?</h2>
+    <p>This adjusts how much detail your kit includes.</p>
+    <div class="fam-grid" id="fam-grid">
+      <div class="fam-card" role="button" tabindex="0" data-val="simple" onclick="selFam('simple',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selFam('simple',this)}">
+        <h3>Keep it simple</h3>
+        <p>Give me the agenda and essentials. I'll handle the room.</p>
       </div>
-      <div class="fam-card" role="button" tabindex="0" onclick="selFam('some', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selFam('some',this)}">
-        <h3>Sometimes</h3>
-        <p>We've used structure before but it's not consistent yet.</p>
+      <div class="fam-card" role="button" tabindex="0" data-val="some" onclick="selFam('some',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selFam('some',this)}">
+        <h3>Some guidance</h3>
+        <p>I want prompts and tips, but not a script.</p>
       </div>
-      <div class="fam-card" role="button" tabindex="0" onclick="selFam('experienced', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selFam('experienced',this)}">
-        <h3>Yes, regularly</h3>
-        <p>We know the basics. Give us the essentials.</p>
+      <div class="fam-card" role="button" tabindex="0" data-val="coach" onclick="selFam('coach',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selFam('coach',this)}">
+        <h3>Coach me through it</h3>
+        <p>I'm newer to structured facilitation; give me more detail.</p>
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-ghost" onclick="goTo(2)">← Back</button>
-      <button class="btn btn-primary" id="b3" onclick="buildKit()" disabled>Build my kit →</button>
+      <button class="btn btn-ghost" onclick="goPrev()">← Back</button>
+      <button class="btn btn-primary" id="btn-fam" onclick="buildKit()" disabled>Build my kit →</button>
     </div>
   </div>
 
-  <!-- RESULTS -->
-  <div class="step" id="res"></div>
+  <!-- KIT OUTPUT -->
+  <div class="screen" id="res"></div>
 
 </div>
 
 <script>
-const ST = { q: null, size: null, fam: null };
+/* ══════════════════════════════════════════
+   STATE
+   ══════════════════════════════════════════ */
+const ST = {
+  path: null,    // 'pain' | 'purpose'
+  pain: null,    // Q0
+  q: null,       // Q1
+  size: null,    // Q2
+  fam: null      // Q3
+  // Future: dynamics, environment
+};
 
-/* ── SIZE + QUESTION COMPATIBILITY ── */
+/* ══════════════════════════════════════════
+   PAIN → PURPOSE MAPPING
+   ══════════════════════════════════════════ */
+const PAIN_TO_Q = {
+  dominant: 'ideation',
+  decisions: 'activation',
+  followup: 'implementation',
+  tangents: 'implementation',
+  silence: 'ideation',
+  energy: 'activation',
+  none: 'activation'
+};
+
+const PAIN_LABELS = {
+  dominant: 'one person runs the show',
+  decisions: 'we talk but never decide',
+  followup: 'nothing happens after',
+  tangents: 'we go off the rails',
+  silence: 'half the room is silent',
+  energy: 'low energy, checked out',
+  none: 'leveling up'
+};
+
+/* ══════════════════════════════════════════
+   SEVERITY GRID
+   ══════════════════════════════════════════ */
+const SEVERITY = {
+  dominant:  { ideation: 'critical', activation: 'critical', implementation: 'moderate', thirty: 'moderate' },
+  decisions: { ideation: 'fine',     activation: 'critical', implementation: 'moderate', thirty: 'moderate' },
+  followup:  { ideation: 'moderate', activation: 'moderate', implementation: 'critical', thirty: 'critical' },
+  tangents:  { ideation: 'fine',     activation: 'critical', implementation: 'critical', thirty: 'moderate' },
+  silence:   { ideation: 'critical', activation: 'critical', implementation: 'moderate', thirty: 'fine' },
+  energy:    { ideation: 'critical', activation: 'moderate', implementation: 'fine',     thirty: 'moderate' },
+  none:      { ideation: 'fine',     activation: 'fine',     implementation: 'fine',     thirty: 'fine' }
+};
+
+/* ══════════════════════════════════════════
+   COMPATIBILITY NOTES (size × type)
+   ══════════════════════════════════════════ */
 const COMPAT = {
   ideation: {
-    small: { type: 'warn', label: 'Watch for missing voices', msg: "Ideation benefits from diverse perspectives. With 3–5 people, ask: who isn't in this room who should be? A small group generates fewer unexpected ideas. Consider whether you can bring more voices in — even asynchronously before the meeting." },
-    ideal: { type: 'good', label: 'Ideal combination', msg: "7 ± 2 is the sweet spot for ideation. You have enough diversity to generate unexpected connections without the logistics overhead of a large group." },
-    large: { type: 'good', label: 'This works well', msg: "High altitude meetings can handle 11–15 people effectively. More voices mean more unexpected connections. Your kit will include techniques designed for larger groups." }
-  },
-  decision: {
-    small: { type: 'good', label: 'Tight and focused', msg: "Decision-making with 3–5 people is clean and direct. You'll move fast. Watch that you have the right perspectives represented — small groups can have blind spots." },
-    ideal: { type: 'good', label: 'Ideal combination', msg: "This is the sweet spot for decision-making. Enough perspectives to stress-test the options, small enough to actually reach a decision." },
-    large: { type: 'warn', label: 'Getting big for this altitude', msg: "Decision-making with 11–15 people starts to strain. People are beginning to split into execution groups at this stage. Consider whether everyone truly needs to be in this room, or whether some should be informed rather than involved." }
+    small: { type: 'warn', label: 'Watch for missing voices', msg: "With 3\u20135 people, ask: who isn't in this room who should be? A small group generates fewer unexpected ideas." },
+    core:  { type: 'good', label: 'Sweet spot', msg: "This is the ideal size for generating ideas. Enough diversity for unexpected connections without logistics overhead." },
+    large: { type: 'good', label: 'This works well', msg: "More voices mean more unexpected connections. Your kit will include techniques designed for larger groups." }
   },
   activation: {
-    small: { type: 'good', label: 'Built for this', msg: "Activation meetings are for the people doing the work. 3–5 is a natural execution team size. Everyone gets a task. There are no observers." },
-    ideal: { type: 'good', label: 'Ideal combination', msg: "Good size for a kickoff. Everyone can have a named commitment. The recorder can track it all without chaos." },
-    large: { type: 'alert', label: 'This group may be too big', msg: "What will we do meetings work best with the core execution team — typically 7 ± 2. With 11–15 people, you likely have multiple sub-teams who should each run their own activation meeting. Your kit will note where this matters." }
+    small: { type: 'good', label: 'Tight and focused', msg: "Decision-making with 3\u20135 people is clean and direct. Watch that you have the right perspectives represented." },
+    core:  { type: 'good', label: 'Sweet spot', msg: "Enough perspectives to stress-test the options, small enough to actually reach a decision." },
+    large: { type: 'warn', label: 'Getting big for decisions', msg: "With 10+ people, consider whether everyone truly needs to be in this room. Some may be better informed than involved." }
+  },
+  implementation: {
+    small: { type: 'good', label: 'Built for this', msg: "3\u20135 is a natural execution team. Everyone gets a task. No observers." },
+    core:  { type: 'good', label: 'Sweet spot', msg: "Everyone can have a named commitment. The Recorder can track it all." },
+    large: { type: 'alert', label: 'This group may be too big', msg: "Execution meetings work best with 7 or fewer. With 10+ people, you likely have sub-teams who should run their own sessions." }
   },
   thirty: {
-    small: { type: 'good', label: 'Clean and accountable', msg: "30/30s with 3–5 people are tight, personal, and highly accountable. Every action item gets real attention. This is often the ideal size for a learning loop." },
-    ideal: { type: 'good', label: 'Ideal combination', msg: "Good size for a 30/30. Enough people to have meaningful accountability without the meeting becoming a status report marathon." },
-    large: { type: 'alert', label: 'Consider splitting', msg: "A 30/30 with 11–15 people risks becoming a status report rather than a learning loop. People with action items in sub-groups should ideally run their own 30/30 and have a representative report to the larger group. Your kit will note where to adapt." }
+    small: { type: 'good', label: 'Clean and accountable', msg: "Every action item gets real attention. This is often the ideal size for a learning loop." },
+    core:  { type: 'good', label: 'Sweet spot', msg: "Enough people for meaningful accountability without becoming a status report marathon." },
+    large: { type: 'alert', label: 'Consider splitting', msg: "A 30/30 with 10+ people risks becoming a status report. Sub-teams should run their own and have a representative report up." }
   }
 };
 
-/* ── MEETING DATA ── */
+/* ══════════════════════════════════════════
+   MEETING TYPE DATA (base content)
+   ══════════════════════════════════════════ */
 const DATA = {
   ideation: {
-    label: 'Ideation',
-    altitude: 'High altitude · Visionary',
-    anchor: 'What could we do?',
+    label: 'Wonder & Invention',
+    anchor: 'Explore possibilities',
+    focus: 'Wonder & Invention',
     getDur: (s) => s === 'small' ? '60 min' : s === 'large' ? '120 min' : '90 min',
-    quote: "At ideation altitude, your job isn't to evaluate ideas — it's to generate them. Protect the creative space. The worst thing you can do is let someone say 'that won't work' before the idea has room to breathe.",
-    nudge: "Before this meeting, tell the group the one rule: no evaluation during generation. Wonder first. Judgment comes later — in a different meeting.",
-    onboard_alt: "generating ideas — not judging them",
+    quote: "Your job isn't to evaluate ideas \u2014 it's to generate them. Protect the creative space. The worst thing you can do is let someone say 'that won't work' before the idea has room to breathe.",
+    nudge: "Before this meeting, tell the group the one rule: no evaluation during generation. Wonder first. Judgment comes later \u2014 in a different meeting.",
+    onboard_alt: "generating ideas \u2014 not judging them",
     getAgenda: (s) => {
-      const base = [
-        { t: '5 min',  h: 'One-word opener', d: "Each person shares one word for their current state. Creates psychological safety before the creative work begins.", m: 5 },
-        { t: '10 min', h: 'Set the altitude', d: "Name it out loud: 'We're at ideation altitude — generating possibilities, not making decisions. If someone starts evaluating, I'll redirect us.'", m: 10, sizeNote: { small: "With only 3–5 people, explicitly acknowledge the size: 'We're a small group — let's each push ourselves to surface at least three ideas we wouldn't normally say out loud.'" } },
-        { t: s === 'large' ? '45 min' : '30 min', h: 'Divergent thinking', d: s === 'large' ? 'Use one of the large-group techniques below. Break into pairs or triads first, then reconvene to share. Do not run a full-group round-robin at this size.' : 'Use one of the techniques below — not open brainstorming. Push for volume and novelty over feasibility.', m: s === 'large' ? 45 : 30 },
-        { t: '20 min', h: 'Pattern recognition', d: "Cluster ideas into themes. Ask: 'What's emerging that we didn't expect?' Look for the unexpected connection.", m: 20 },
-        { t: '10 min', h: 'Insight capture', d: 'Document top themes and surprising ideas. Assign someone to distribute a clean summary within 24 hours.', m: 10 },
-        { t: '5 min',  h: 'Who&apos;s missing?', d: "This is the ideation altitude question: who wasn't in this room who should have been? Name them. Schedule the follow-up conversation.", m: 5, sizeNote: { small: "Critical at small group size. Ideation needs diverse perspectives. Commit to a follow-up before you close.", large: "Even with 11–15 people, ask this. More voices in ideation is a feature, not a problem." } },
-        { t: '10 min', h: 'Transition plan', d: "Which ideas move to a 'What should we do?' meeting? Who owns that next conversation? Set the date before you leave the room.", m: 10 }
+      const items = [
+        { t: '5 min', h: 'One-Word Opener', d: "Each person shares one word for how they're showing up today. Gets every voice in the room before the real work starts.", m: 5 },
+        { t: '10 min', h: 'Ground rules and altitude check', d: "Name it out loud: 'We're generating possibilities today, not making decisions. If someone starts evaluating, I'll redirect us.'", m: 10 },
+        { t: s === 'large' ? '45 min' : '30 min', h: 'Generate possibilities', d: s === 'large' ? 'Use one of the large-group techniques below. Break into pairs or triads first, then reconvene to share.' : 'Use one of the techniques below \u2014 not open brainstorming. Push for volume and novelty over feasibility.', m: s === 'large' ? 45 : 30 },
+        { t: '20 min', h: 'Evaluation and clustering', d: "Cluster ideas into themes. Ask: 'What's emerging that we didn't expect?' Look for the unexpected connection.", m: 20 },
+        { t: '10 min', h: 'Capture and assign', d: 'Document top themes. Assign someone to distribute a clean summary within 24 hours.', m: 10 },
+        { t: '5 min', h: "Who's missing?", d: "Who wasn't in this room who should have been? Name them. Schedule the follow-up.", m: 5 },
+        { t: '10 min', h: 'What happens next', d: "Which ideas move to a 'Choose a direction' meeting? Who owns that next conversation? Set the date before you leave.", m: 10 }
       ];
-      return base;
+      if (s === 'small') items[0].m = 3;
+      return items;
     },
-    getRoles: (s) => {
+    getDefaultRoles: (s) => {
       if (s === 'small') return {
-        essential: [{ n: 'Table Guide + Knowledge Keeper', d: 'Keeps the group at ideation altitude and captures ideas. Combined for small groups.', a: 'Watch for self-editing — people second-guessing their own ideas before saying them. Interrupt it.', combined: true }],
-        catalyst: [{ n: 'The Timekeeper', d: 'Sets visible timers. Gives 2-minute warnings before each segment ends.', a: 'Keep energy high. Transitions matter more than extra time on any one section.' }]
+        essential: [
+          { n: 'Leader/Guide + Recorder', d: 'Keeps the group generating (not judging) and captures every idea. Combined for small groups.', a: 'Watch for self-editing \u2014 people second-guessing their own ideas before saying them. Interrupt it.', combined: true },
+          { n: 'Timekeeper', d: 'Sets visible timers. Keeps transitions clean.', a: 'Keep energy high. Transitions matter more than extra time on any one section.' }
+        ],
+        catalyst: [{ n: 'The Insight Seeker', d: 'Listens for connections between seemingly unrelated ideas. Spots the pattern that turns separate threads into one breakthrough.', a: "Watch for the unexpected connection. Name it out loud when you see it." }]
       };
       if (s === 'large') return {
         essential: [
-          { n: 'Table Guide', d: 'Keeps altitude. Redirects evaluation. Manages subgroup transitions.', a: "With this group size, you'll need to actively move people in and out of subgroup work. Plan those transitions in advance." },
-          { n: 'Knowledge Keeper', d: 'Captures themes across subgroups. Consolidates before the pattern recognition segment.', a: 'Consider assigning a note-taker in each subgroup who reports to the Knowledge Keeper.' },
-          { n: 'Timekeeper', d: 'Manages subgroup timing. Calls the full group back together.', a: 'Set a visible timer everyone can see. With 11+ people, transitions take longer than you expect.' }
+          { n: 'Leader/Guide', d: 'Keeps altitude. Redirects evaluation. Manages subgroup transitions.', a: "With this group size, plan those transitions in advance." },
+          { n: 'Recorder', d: 'Captures themes across subgroups. Consolidates before the clustering segment.', a: 'Consider a note-taker in each subgroup who reports to the Recorder.' },
+          { n: 'Timekeeper', d: 'Manages subgroup timing. Calls the full group back together.', a: 'Set a visible timer everyone can see. With 10+ people, transitions take longer than you expect.' },
+          { n: 'Parking Lot Attendant', d: "Catches topics that stray from the purpose of this meeting. Parks them visibly.", a: "Record in the person's actual words. Review before the meeting ends." }
         ],
         catalyst: [
-          { n: 'The Wonderer', d: "Asks the big 'what if?' questions. Keeps the group exploring rather than converging.", a: "With a large group, actively watch for the dominant voice. Protect quieter ideas." },
-          { n: 'The Amplifier', d: "Ensures quieter voices get airtime across subgroups.", a: "Do this: 'We haven't heard from this side of the room — what's emerging over there?'" }
+          { n: 'The Amplifier', d: "Makes sure quieter voices get heard across subgroups.", a: "Do this: 'We haven't heard from this side of the room \u2014 what's emerging over there?'" },
+          { n: 'The Insight Seeker', d: 'Listens for connections between ideas that nobody else is seeing.', a: "With a large group, actively watch for the dominant voice. Protect quieter ideas." }
         ]
       };
       return {
         essential: [
-          { n: 'Table Guide', d: 'Keeps discussion at ideation altitude. Redirects evaluation the moment it surfaces.', a: "Say this when it happens: 'That's a great evaluation thought — let's hold it for the decision meeting. What other possibilities haven't we named yet?'" },
-          { n: 'Knowledge Keeper', d: 'Captures ideas as they surface. Groups themes in real time. Distributes notes within 24 hours.', a: 'Write everything down — including the half-formed ideas. Those often become the most interesting.' },
+          { n: 'Leader/Guide', d: 'Keeps the discussion focused on generating possibilities. Redirects evaluation the moment it surfaces.', a: "Say this: 'Great evaluation thought \u2014 let's hold it for the decision meeting. What other possibilities haven't we named yet?'" },
+          { n: 'Recorder', d: 'Captures ideas as they surface. Groups themes in real time. Distributes notes within 24 hours.', a: 'Write everything down \u2014 including the half-formed ideas. Those often become the most interesting.' },
           { n: 'Timekeeper', d: 'Manages transitions. Gives 2-minute warnings.', a: 'Set a visible timer the whole room can see.' }
         ],
         catalyst: [
-          { n: 'The Wonderer', d: "Asks the big 'what if?' and 'why not?' questions. Keeps the group in exploration mode.", a: "Watch for self-editing. When someone says 'this might be a dumb idea' — that's your cue to lean in." },
-          { n: 'The Amplifier', d: "Ensures quieter voices get airtime.", a: "Do this: 'We haven't heard from everyone — [name], what are you thinking?'" }
+          { n: 'The Amplifier', d: "Makes sure quieter voices get heard.", a: "Do this: 'We haven't heard from everyone \u2014 [name], what are you thinking?'" },
+          { n: 'The Insight Seeker', d: "Listens for connections between ideas. Spots patterns.", a: "Watch for self-editing. When someone says 'this might be a dumb idea' \u2014 that's your cue to lean in." }
         ]
       };
     },
-    getTech: (s) => {
-      const all = [
-        { n: 'Brainwriting 6-3-5', d: '6 people write 3 ideas in 5 minutes, then pass the sheet. Each person builds on others. No groupthink. No domination.', w: 'Best when you have strong voices in the room or want true equal contribution.', sizes: ['ideal'] },
-        { n: 'Reverse brainstorming', d: "Ask 'How could we make this worse?' then flip each answer. Breaks through stuck thinking.", w: 'Best when the group keeps recycling the same ideas.', sizes: ['small', 'ideal', 'large'] },
-        { n: 'Pair and share', d: 'Each pair generates ideas independently for 10 minutes, then shares with the full group. Prevents anchoring on the first idea stated.', w: 'Best for larger groups where round-robin breaks down.', sizes: ['ideal', 'large'] },
-        { n: 'Starbursting', d: "Generate questions — who, what, where, when, why, how — instead of answers. Explore the problem space before jumping to solutions.", w: "Best when the problem itself isn't well-defined yet.", sizes: ['small', 'ideal'] },
-        { n: 'Gallery walk', d: 'Post themes on the wall. Each person walks and adds ideas silently with sticky notes. Reconvene to discuss clusters.', w: 'Best for large groups — eliminates the round-robin problem entirely.', sizes: ['large'] }
+    getDefaultTech: (s) => {
+      if (s === 'small') return [
+        { n: 'Silent Idea Generation', d: "Everyone writes down ideas individually before sharing. Prevents groupthink and ensures quieter voices are heard.", w: 'Best when you want equal contribution from a small group.' },
+        { n: 'Round-Robin Sharing', d: 'Each person shares one idea at a time, taking turns. No one dominates the conversation.', w: 'Best for ensuring equal participation.' },
+        { n: 'Mind Mapping', d: 'A visual method for linking related ideas around a central concept. Stimulates creative connections.', w: "Best when you want to explore how ideas connect to each other." }
       ];
-      return all.filter(t => t.sizes.includes(s));
+      if (s === 'large') return [
+        { n: 'Gallery Walk', d: 'Post themes on the wall. Each person walks and adds ideas silently with sticky notes. Reconvene to discuss clusters.', w: 'Best for large groups \u2014 combines movement with collaboration, eliminates round-robin entirely.' },
+        { n: 'Role-Storming', d: "Participants adopt specific perspectives \u2014 customer, competitor, visionary \u2014 and generate ideas from that viewpoint.", w: 'Best when the group keeps recycling the same ideas.' },
+        { n: 'Six Thinking Hats', d: 'Think from six different angles: facts, feelings, risks, benefits, creativity, and process. Forces the group to look at the whole picture.', w: "Best when the group needs to explore an issue from multiple perspectives." },
+        { n: 'Asset Mapping', d: 'Identify and link team assets \u2014 skills, resources, knowledge \u2014 to create new, innovative combinations.', w: 'Best when you want to build on what you already have.' }
+      ];
+      return [
+        { n: 'Silent Idea Generation', d: "Everyone writes down ideas individually before sharing. Prevents groupthink and ensures every voice counts.", w: 'Best when you want true equal contribution.' },
+        { n: 'SCAMPER', d: 'Modify existing ideas by asking: Substitute, Combine, Adapt, Modify, Put to another use, Eliminate, Reverse.', w: 'Best when you want to innovate on something that already exists.' },
+        { n: 'Question Storming', d: "Instead of brainstorming ideas, brainstorm questions. Reframes the problem in ways you didn't expect.", w: "Best when the problem itself isn't well-defined yet." },
+        { n: 'The Anti-Problem', d: "Ask: 'How could we make this worse?' Then flip each answer into a solution.", w: 'Best when the group is stuck or the problem feels impossible.' }
+      ];
     },
     refl: [
-      'Did we stay at ideation altitude, or did evaluation creep in?',
+      'Did we stay focused on generating, or did evaluation creep in?',
       'Who contributed the most unexpected idea? Did every voice get heard?',
       'What themes emerged that surprised us?',
-      'Who was missing from this room? When will we get their perspective?',
-      "Is the transition to 'What should we do?' scheduled?"
+      "Who was missing from this room? When will we get their perspective?",
+      "Is the transition to 'Choose a direction' scheduled?"
     ]
   },
 
-  decision: {
-    label: 'Decision-Making',
-    altitude: 'Mid altitude · Strategic',
-    anchor: 'What should we do?',
+  activation: {
+    label: 'Discernment & Galvanizing',
+    anchor: 'Choose a direction',
+    focus: 'Discernment & Galvanizing',
     getDur: (s) => s === 'small' ? '45 min' : s === 'large' ? '90 min' : '60 min',
-    quote: "Decision-making altitude is where good ideas get sharpened into real priorities. Your job is to create just enough productive tension that the team evaluates honestly — without killing momentum. Push them to choose, not just discuss.",
-    nudge: "Open by stating the decision method out loud before discussion begins: 'We're using the 2×2 matrix today — the top option becomes our commitment.' When people know the rules upfront, the conversation stays honest.",
-    onboard_alt: "evaluating and choosing — not generating new ideas",
+    quote: "This is where good ideas get sharpened into real commitments. Your job is to create just enough productive tension that the team evaluates honestly \u2014 without killing momentum. Push them to choose, not just discuss.",
+    nudge: "Open by stating the decision method out loud before discussion begins: 'We're using the 2\u00d72 matrix today \u2014 the top option becomes our commitment.' When people know the rules upfront, the conversation stays honest.",
+    onboard_alt: "evaluating and choosing \u2014 not generating new ideas",
     getAgenda: (s) => [
-      { t: '5 min',  h: 'Set the altitude', d: "State it clearly: 'Today we're choosing, not generating. New ideas go in the Parking Lot — we'll bring them to a future ideation meeting.'", m: 5 },
-      { t: s === 'large' ? '30 min' : '20 min', h: 'Evaluate options', d: s === 'large' ? 'With this group size, consider breaking into subgroups to evaluate different options simultaneously, then report back. Full-group evaluation of every option at 11+ people is slow and susceptible to anchoring.' : 'Present the ideas on the table. Score against clear criteria: impact, feasibility, strategic alignment. No vague impressions.', m: s === 'large' ? 30 : 20, sizeNote: { large: "With 11–15 people, ask: does everyone truly need to be in this decision? Or should the execution team (5–7 people) make this call with broader input already captured?" } },
-      { t: '15 min', h: 'Prioritize', d: "Use one of the decision tools below. Force a choice — 'let's keep all of them' is not a decision.", m: 15 },
-      { t: '15 min', h: 'Define the outcome', d: "For the top priority: paint a vivid word picture of success. What will we see? What will be different? What are the measurable characteristics? This ensures everyone's imagining the same thing.", m: 15 },
-      { t: '5 min',  h: 'Transition to action', d: "Schedule the activation meeting before you leave. Who is the execution team? Decisions without commitment dates disappear.", m: 5, sizeNote: { large: "The activation meeting should be smaller — the execution team only. Name who's in that room before you close." } }
+      { t: '5 min', h: 'Set the altitude', d: "State it clearly: 'Today we're choosing, not generating. New ideas go in the Parking Lot.'", m: 5 },
+      { t: s === 'large' ? '30 min' : '20 min', h: 'Evaluate options', d: s === 'large' ? 'Break into subgroups to evaluate different options simultaneously, then report back.' : 'Present the options. Score against clear criteria: impact, feasibility, and fit with where the company is headed. No vague impressions.', m: s === 'large' ? 30 : 20 },
+      { t: '15 min', h: 'Prioritize', d: "Use one of the decision tools below. Force a choice \u2014 'let's keep all of them' is not a decision.", m: 15 },
+      { t: '15 min', h: 'Define the outcome', d: "For the top priority: what will success look like? What will be different? What are the measurable characteristics?", m: 15 },
+      { t: '5 min', h: 'Transition to action', d: "Schedule the execution meeting before you leave. Name who's in that room. Decisions without dates disappear.", m: 5 }
     ],
-    getRoles: (s) => {
+    getDefaultRoles: (s) => {
       if (s === 'small') return {
-        essential: [{ n: 'Table Guide + Knowledge Keeper', d: 'Keeps altitude, captures decisions, manages the decision tool. Combined for small groups.', a: 'Your biggest job: keep the group from looping. When a decision is made, say it out loud and move on.', combined: true }],
-        catalyst: [{ n: 'The Timekeeper', d: 'Manages transitions. Visible timer at all times.', a: 'Small groups lose time to tangents. Guard the clock.' }]
+        essential: [
+          { n: 'Leader/Guide + Recorder', d: 'Keeps altitude, captures decisions, manages the decision tool. Combined for small groups.', a: "Your biggest job: keep the group from looping. When a decision is made, say it out loud and move on.", combined: true },
+          { n: 'Timekeeper', d: 'Manages transitions. Visible timer at all times.', a: 'Small groups lose time to tangents. Guard the clock.' }
+        ],
+        catalyst: [{ n: 'The Counterpoint', d: "Challenges assumptions and tests ideas before the group commits.", a: "Ask this: 'What's the strongest argument against this option?'" }]
       };
       return {
         essential: [
-          { n: 'Table Guide', d: 'Keeps the group at decision altitude. Calls the question when the group has enough information to decide.', a: "Say this: 'We have enough to make a call. Let's decide.' Then shut up and wait." },
-          { n: 'Knowledge Keeper', d: 'Captures decisions, criteria used, and what was set aside. Distributes within 4 hours.', a: 'Record not just what was decided but why. Future you will need that context.' },
-          { n: 'Timekeeper', d: 'Manages transitions. Prevents over-deliberation on any one option.', a: 'Give a 2-minute warning before moving to the vote. This focuses the last conversation.' }
+          { n: 'Leader/Guide', d: 'Keeps the group at decision altitude. Calls the question when the group has enough information to decide.', a: "Say this: 'We have enough to make a call. Let's decide.' Then stop talking and wait." },
+          { n: 'Recorder', d: 'Captures decisions, criteria used, and what was set aside. Distributes within 4 hours.', a: "Record not just what was decided but why. Future you will need that context." },
+          { n: 'Timekeeper', d: 'Manages transitions. Prevents over-deliberation on any one option.', a: 'Give a 2-minute warning before moving to the vote.' }
         ],
         catalyst: [
-          { n: 'The Provoker', d: "Challenges assumptions. Plays devil's advocate. Guards against premature consensus.", a: "Ask this: 'What's the strongest argument against this option?'" },
-          { n: 'The Discerner', d: "Applies critical evaluation. Surfaces what's being assumed.", a: "Ask this: 'What evidence do we have? What are we treating as fact that's actually an assumption?'" }
+          { n: 'The Counterpoint', d: "Challenges assumptions. Tests ideas. Guards against everyone just nodding along.", a: "Ask this: 'What's the strongest argument against this option?'" },
+          { n: 'The Discerner', d: "Applies critical evaluation. Surfaces what's being assumed vs. what's actually known.", a: "Ask this: 'What evidence do we have? What are we treating as fact that's actually an assumption?'" }
         ]
       };
     },
-    getTech: (s) => [
-      { n: '2×2 matrix (Big Easy)', d: 'Rate each option on impact (1–5) and ease of implementation (1–5). Highest combined score is your Big Easy — highest impact, most doable. Everyone votes simultaneously.', w: 'Best when you need to weigh tradeoffs and want to start with a win.' },
-      { n: 'Dot voting', d: s === 'large' ? 'Each person gets 3–5 dots to allocate across options. For larger groups, use digital dot voting or colored markers to keep it manageable.' : 'Each person gets 3–5 dots to allocate across options. Simple, visual, democratic — prevents the loudest voice from winning.', w: 'Best for narrowing a long list quickly.' },
-      { n: 'Weighted criteria scoring', d: 'Score each option against 3–5 criteria (strategic alignment, resources, timeline, risk). More rigorous, leaves a documented record.', w: 'Best for high-stakes decisions that need documentation or stakeholder buy-in.' }
+    getDefaultTech: (s) => [
+      { n: '2\u00d72 Matrix (Big Easy)', d: 'Rate each option on impact and ease. Highest combined score is your Big Easy \u2014 highest impact, most doable. Everyone votes at the same time.', w: 'Best when you need to weigh tradeoffs and want to start with a win.' },
+      { n: 'Dot Voting', d: s === 'large' ? 'Each person gets 3\u20135 dots to allocate. For larger groups, use colored markers to keep it manageable.' : 'Each person gets 3\u20135 dots to allocate across options. Simple, visual \u2014 prevents the loudest voice from winning.', w: 'Best for narrowing a long list quickly.' },
+      { n: 'Weighted Criteria Scoring', d: 'Score each option against 3\u20135 criteria (alignment, resources, timeline, risk). More rigorous, leaves a documented record.', w: 'Best for high-stakes decisions that need documentation.' }
     ],
     refl: [
       'Did we use clear criteria, or did we default to the loudest voice?',
       'Were any options dismissed without fair consideration?',
       'Does the chosen priority have measurable characteristics of success?',
-      'Did anyone try to reopen ideation? How did we handle it?',
-      'Is the activation meeting scheduled with the right (smaller) team?'
+      'Did anyone try to go back to generating new ideas instead of deciding? How did we handle it?',
+      'Is the execution meeting scheduled with the right team?'
     ]
   },
 
-  activation: {
-    label: 'Kickoff / Activation',
-    altitude: 'Mid-low altitude · Tactical',
-    anchor: 'What will we do?',
+  implementation: {
+    label: 'Execution & Accountability',
+    anchor: 'Turn a decision into action',
+    focus: 'Execution & Accountability',
     getDur: (s) => '55 min',
-    quote: "The kickoff is a commitment ceremony, not a planning session. The decision is already made. Your job is to translate it into specific promises — named owners, concrete next steps, hard deadlines. Possibility becomes promise in this room.",
-    nudge: "End with a round-robin: each person states their one commitment out loud while the recorder captures it. No one leaves without a named action and a deadline. 'I'll look into it' is not a commitment.",
-    onboard_alt: "making commitments — the decision is already made",
+    quote: "This is where most organizations lose the thread. The work was decided \u2014 now it needs to get done. Your job is to remove obstacles, not revisit decisions. If someone tries to reopen a debate, redirect them.",
+    nudge: "End with a round-robin: each person states their one commitment out loud while the Recorder captures it. No one leaves without a named action and a deadline. 'I'll look into it' is not a commitment.",
+    onboard_alt: "making commitments \u2014 the decision is already made",
     getAgenda: (s) => [
-      { t: '5 min',  h: 'Set the altitude', d: "Remind everyone: 'The decision is made. We're not re-opening it today. We're here to commit to specific actions.'", m: 5, sizeNote: { large: "With 11–15 people, open by naming this explicitly: 'Everyone in this room should leave with a specific action. If you're not doing anything in the next 30 days, you may be in the wrong meeting.'" } },
-      { t: '10 min', h: 'Review the outcome', d: 'Briefly confirm the agreed outcome and what success looks like. If there is confusion about the destination, surface it now — not mid-execution.', m: 10 },
-      { t: s === 'large' ? '30 min' : '20 min', h: 'Build the action plan', d: s === 'large' ? 'With 11–15 people, split into sub-teams around logical work areas. Each sub-team builds their own action plan. Reconvene to share commitments.' : 'For each action item: specific next step, named owner, hard deadline. Go person to person. Ask: "What can you do in the next 30 days with one hour of your time?"', m: s === 'large' ? 30 : 20 },
-      { t: '10 min', h: 'Identify first obstacles', d: 'What is most likely to slow this down? Name it now. Assign someone to watch for it. Prevention is faster than recovery.', m: 10 },
-      { t: '5 min',  h: 'Schedule the 30/30', d: s === 'large' ? 'Sub-teams should schedule their own 30/30 meetings. The core team 30/30 should be a smaller group — 7 or fewer. Set those dates now.' : 'Set the date for your first 30/30 before you leave. The habit of reconvening is more important than the perfect date.', m: 5 },
-      { t: '5 min',  h: 'Commitment close', d: 'Each person states their commitment out loud. Recorder reads them back. Everyone hears it. That is the close.', m: 5 }
+      { t: '5 min', h: 'One professional win', d: "Each person shares one professional win for the week. Sets a positive, task-oriented tone.", m: 5 },
+      { t: '5 min', h: 'Ground rules and altitude check', d: "Remind everyone: 'The decision is made. We're not re-opening it today. Execution only.'", m: 5 },
+      { t: '15 min', h: 'Progress review', d: "Review objectives, tasks, and deadlines. Red/Yellow/Green status for each. Spend time on Yellow and Red only.", m: 15 },
+      { t: s === 'large' ? '20 min' : '15 min', h: 'Handoff planning', d: s === 'large' ? 'Split into sub-teams around logical work areas. Each sub-team builds their own action plan. Reconvene to share.' : "For each action item: specific next step, named owner, hard deadline. 'I'll look into it' is not an action item.", m: s === 'large' ? 20 : 15 },
+      { t: '10 min', h: 'Obstacle removal', d: "What's most likely to slow this down? Name it now. Assign someone to watch for it.", m: 10 },
+      { t: '5 min', h: 'Commitment close', d: 'Each person states their commitment out loud. Recorder reads them back. That is the close.', m: 5 }
     ],
-    getRoles: (s) => {
-      const base = {
+    getDefaultRoles: (s) => {
+      if (s === 'small') return {
         essential: [
-          { n: 'Table Guide', d: 'Keeps altitude. The decision is made — the Table Guide redirects any attempt to re-open it.', a: "Say this: 'That's worth discussing — schedule a separate meeting. Right now, what's your commitment?'" },
-          { n: 'Knowledge Keeper', d: 'Captures every action item with all four elements: who, what, deliverable, by when. Distributes within 4 hours.', a: 'Non-negotiable: if any element is missing, stop and get it. An incomplete action item will not get done.' },
-          { n: 'Timekeeper', d: 'Manages transitions. Prevents the action planning segment from running over.', a: 'Set a visible timer. The commitment close is the most important part — protect its time.' }
+          { n: 'Leader/Guide + Recorder', d: 'Keeps altitude and captures all commitments. Combined for small groups.', a: "Go person to person. Name each person. Make eye contact. 'What's yours?'", combined: true },
+          { n: 'Timekeeper', d: 'Manages transitions. Protects the commitment close.', a: 'The commitment close is the most important part. Protect its time.' }
+        ],
+        catalyst: [{ n: 'The Tenacity Driver', d: "Holds the group accountable to specificity. Vague commitments don't get past this role.", a: "Ask: 'What specifically will be done, by whom, by when \u2014 and what's the deliverable?'" }]
+      };
+      return {
+        essential: [
+          { n: 'Leader/Guide', d: 'Keeps altitude. Redirects any attempt to re-open the decision.', a: "Say this: 'That's worth discussing \u2014 schedule a separate meeting. Right now, what's your commitment?'" },
+          { n: 'Recorder', d: 'Captures every action item: who, what, deliverable, by when. Distributes within 4 hours.', a: "If any element is missing, stop and get it. An incomplete action item won't get done." },
+          { n: 'Timekeeper', d: 'Manages transitions. Prevents action planning from running over.', a: 'Set a visible timer. Protect the commitment close.' }
         ],
         catalyst: [
-          { n: 'The Enabler', d: 'Identifies what people need to succeed and surfaces barriers before they become blockers.', a: "Ask this: 'What would make this easier for you to actually get done?'" },
-          { n: 'The Tenacity Driver', d: 'Holds the group accountable to specificity. Vague commitments do not get past this role.', a: "Ask this: 'What specifically will be done, by whom, by when — and what's the deliverable?'" }
+          { n: 'The Enabler', d: 'Identifies what people need to succeed and surfaces barriers before they become blockers.', a: "Ask: 'What would make this easier for you to actually get done?'" },
+          { n: 'The Tenacity Driver', d: "Holds the group accountable to specificity.", a: "Ask: 'What specifically will be done, by whom, by when \u2014 and what's the deliverable?'" }
         ]
       };
-      if (s === 'small') {
-        base.essential = [{ n: 'Table Guide + Knowledge Keeper', d: 'Keeps altitude and captures all commitments. Combined for small groups.', a: 'With 3–5 people, go person to person for commitments. Name each person. Make eye contact. \"What\'s yours?\"', combined: true }];
-      }
-      return base;
     },
-    getTech: (s) => [
-      { n: 'Who / What / Deliverable / By When', d: 'The only format for action items that works. Every item needs all four. Anything missing is incomplete — it will not get done.', w: 'Use for every single action item. No exceptions.' },
-      { n: 'The one-hour ask', d: "Ask: 'What can you do with one hour of your time in the next 30 days?' Small asks build the habit of follow-through. Bigger asks get avoided.", w: 'Best when workloads are heavy or the team is new to structured accountability.' },
-      { n: 'Parking Lot', d: 'Capture ideas or scope expansions that surface during the kickoff. They are not ignored — they go in the Parking Lot and get scheduled for a future ideation meeting.', w: 'Kickoffs always surface new ideas. This is how you honor them without losing momentum.' }
+    getDefaultTech: (s) => [
+      { n: 'Who / What / Deliverable / By When', d: 'The only format for action items that works. Every item needs all four. Anything missing is incomplete.', w: 'Use for every single action item. No exceptions.' },
+      { n: 'Red / Yellow / Green', d: 'Green = on track. Yellow = at risk. Red = blocked. Spend meeting time on Yellow and Red only.', w: "Use every execution meeting. It's your forcing function." },
+      { n: '5 Whys', d: 'When a blocker surfaces, ask "why" five times to find the root cause before jumping to solutions.', w: 'Best when the same blocker keeps recurring.' }
     ],
     refl: [
+      'Did we focus on removing obstacles, or did we slip into strategy?',
       'Does every action item have a specific owner, deliverable, and deadline?',
-      'Are the commitments realistic given current workloads?',
+      'Are commitments realistic given current workloads?',
       'Did anyone leave without a task? There are no observers in this meeting.',
-      'Is the first 30/30 scheduled — with the right, smaller group?',
-      'Did the Knowledge Keeper distribute the action plan within 4 hours?'
+      'Did the Recorder distribute the action plan within 4 hours?'
     ]
   },
 
   thirty: {
-    label: '30/30',
-    altitude: 'Ground level · Operational',
-    anchor: "What's our 30/30?",
+    label: 'Reflection & Recalibration',
+    anchor: "Review progress and reset",
+    focus: 'Reflection & Recalibration',
     getDur: (s) => s === 'large' ? '60 min' : '45 min',
-    quote: "The 30/30 is a learning loop, not a status report. Look back 30 days at what happened and what you learned. Look forward 30 days at what adjusts. Keep the pace. Keep moving. The habit of reconvening builds more trust than any single meeting.",
-    nudge: "Start with a quick round: each person shares what they completed and one thing they learned. Then move immediately to forward commitments. This is not a place for war stories about what didn't work — that's a different conversation.",
-    onboard_alt: "reviewing progress and adjusting — not re-opening decisions",
+    quote: "The 30/30 is a learning loop, not a status report. Look back 30 days at what happened and what you learned. Look forward 30 days at what adjusts. The habit of reconvening builds more trust than any single meeting.",
+    nudge: "Start with what was completed and one thing learned. Then move immediately to forward commitments. This is not a place for war stories \u2014 that's a different conversation.",
+    onboard_alt: "reviewing progress and adjusting \u2014 not re-opening decisions",
     getAgenda: (s) => [
-      { t: '5 min',  h: 'Quick connect', d: 'One word each for how things are going. Grounds the group before diving in.', m: 5 },
-      { t: s === 'large' ? '20 min' : '15 min', h: 'What did we learn in the last 30 days?', d: s === 'large' ? 'With 11–15 people, consider having sub-team leads report rather than individuals. One report per work area, not per person — or this becomes a marathon.' : "Each person reports on their action item: done, in progress, or blocked. Be honest — pretending something happened when it didn't breaks trust.", m: s === 'large' ? 20 : 15, sizeNote: { large: "If everyone reports individually, a 15-person 30/30 takes 45 minutes just on lookbacks. Sub-team reporting is not optional at this size." } },
-      { t: '10 min', h: 'Are there new assets or information?', d: "Has anything surfaced in the last 30 days — new people, new resources, new constraints — that should affect direction? This is where the learning loop pays off.", m: 10 },
-      { t: '10 min', h: 'Is our course still right?', d: "Is the outcome still the right one? Do the metrics still make sense? Strategic Doing is built as a series of experiments — a dead end is data, not failure.", m: 10 },
-      { t: s === 'large' ? '15 min' : '10 min', h: 'Next 30-day commitments', d: s === 'large' ? 'Sub-teams set their own next-cycle commitments. Each sub-team lead captures and reports. Then set the date for the next 30/30 — for the right group size.' : 'Each person commits to one specific action in the next 30 days. Who, what, deliverable, by when.', m: s === 'large' ? 15 : 10 }
+      { t: '5 min', h: 'Quick connect', d: 'One word each for how things are going. Grounds the group before diving in.', m: 5 },
+      { t: s === 'large' ? '20 min' : '15 min', h: 'What did we learn in the last 30 days?', d: s === 'large' ? 'Sub-team leads report rather than individuals. One report per work area, not per person.' : "Each person reports on their action item: done, in progress, or blocked. Be honest.", m: s === 'large' ? 20 : 15 },
+      { t: '10 min', h: 'Are there new assets or information?', d: "Anything new in the last 30 days \u2014 new people, resources, constraints \u2014 that should affect direction?", m: 10 },
+      { t: '10 min', h: 'Is our course still right?', d: "Is the outcome still the right one? A dead end is data, not failure.", m: 10 },
+      { t: s === 'large' ? '15 min' : '10 min', h: 'Next 30-day commitments', d: s === 'large' ? 'Sub-teams set their own next-cycle commitments. Set the date for the next 30/30.' : 'Each person commits to one specific action. Who, what, deliverable, by when.', m: s === 'large' ? 15 : 10 }
     ],
-    getRoles: (s) => {
+    getDefaultRoles: (s) => {
       if (s === 'small') return {
-        essential: [{ n: 'Table Guide + Knowledge Keeper', d: 'Keeps altitude and captures commitments. With 3–5 people this is usually the same person.', a: "With a small group, the 30/30 can feel too casual. Keep the structure — it's what makes it a learning loop rather than a check-in.", combined: true }],
-        catalyst: [{ n: 'The Timekeeper', d: 'Keeps the group moving. Small 30/30s have a tendency to run long on the lookback.', a: "Give the lookback segment a hard stop. Forward momentum is the point." }]
+        essential: [
+          { n: 'Leader/Guide + Recorder', d: 'Keeps altitude and captures commitments. Combined for small groups.', a: "Keep the structure \u2014 it's what makes this a learning loop rather than a check-in.", combined: true },
+          { n: 'Timekeeper', d: 'Keeps the group moving. Small 30/30s tend to run long on the lookback.', a: "Give the lookback a hard stop. Forward momentum is the point." }
+        ],
+        catalyst: [{ n: 'The Learning Observer', d: "Tracks what the group is actually learning. Names what we know now that we didn't know walking in.", a: "At the end: 'Here's what changed since last time.'" }]
       };
       return {
         essential: [
-          { n: 'Table Guide', d: 'Keeps the group at ground altitude. Redirects drift into strategy or re-opening decisions.', a: "Redirect like this: 'That's an important question for a different meeting. Right now — what's your next 30-day commitment?'" },
-          { n: 'Knowledge Keeper', d: 'Tracks what everyone committed to. Distributes the updated action plan within 4 hours. Sends the nudge at 2 weeks.', a: 'Non-negotiable: every commitment needs a name and a date.' },
-          { n: 'Timekeeper', d: 'Guards the pace. This is the meeting most likely to run over on lookback and cut forward commitments.', a: 'The forward commitment segment is the most important part of the 30/30. Protect it.' }
+          { n: 'Leader/Guide', d: 'Keeps the group at ground altitude. Redirects drift into strategy or re-opening decisions.', a: "Redirect: 'That's an important question for a different meeting. Right now \u2014 what's your next 30-day commitment?'" },
+          { n: 'Recorder', d: 'Tracks what everyone committed to. Distributes the updated action plan within 4 hours.', a: "Every commitment needs a name and a date." },
+          { n: 'Timekeeper', d: 'Guards the pace. The lookback segment is the most likely to run over.', a: 'The forward commitment segment is the most important part. Protect it.' }
         ],
         catalyst: [
-          { n: 'The Nudge', d: 'Follows up with team members between 30/30s. Not to police — to support.', a: "'[Name], how is [specific task] coming? Anything blocking you? Can I move something?' Personal nudges work. Group reminders don't." }
+          { n: 'The Learning Observer', d: "Tracks what the group is learning across cycles. Names patterns.", a: "At the end: 'Here's what we know now that we didn't know 30 days ago.'" }
         ]
       };
     },
-    getTech: (s) => [
-      { n: 'The four 30/30 questions', d: "Run them every time, in order: What did we learn? Are there new assets? Is our course still right? What's the next 30-day commitment? The consistency is the point.", w: 'Use this exact structure every 30/30. The ritual builds trust.' },
-      { n: 'Variable cycles', d: "30 days is a good default. In turbulent environments, shorten: 14/14 or 7/7. In stable, slow-moving work, extend: 60/60. Match the cycle to your pace of change.", w: 'Review cycle length at the end of each 30/30.' },
-      { n: 'Sub-team reporting (large groups)', d: 'Each sub-team lead reports on behalf of their group: what was completed, what was learned, what the next commitment is. Prevents the 30/30 from becoming a 90-minute status meeting.', w: s === 'large' ? 'Essential at 11–15 people.' : 'Consider this as the group grows beyond 8–9 people.' }
+    getDefaultTech: (s) => [
+      { n: 'The Four 30/30 Questions', d: "Run them every time, in order: What did we learn? Are there new assets? Is our course still right? What's the next commitment? The consistency is the point.", w: 'Use this exact structure every 30/30. The ritual builds trust.' },
+      { n: 'Variable Cycles', d: "30 days is a good default. In fast-moving environments, shorten: 14/14 or 7/7. In stable work, extend: 60/60. Match the cycle to your pace.", w: 'Review cycle length at the end of each 30/30.' },
+      { n: 'Mid-Cycle Nudge', d: "Someone follows up with team members between 30/30s. Not to police \u2014 to support. Personal nudges work. Group reminders don't.", w: s === 'large' ? 'Essential for large groups where accountability can slip.' : 'Best when follow-through has been a problem.' }
     ],
     refl: [
-      'Did we stay at ground altitude, or did we drift into strategy or decisions?',
+      'Did we stay focused on reviewing progress, or did we drift into strategy or re-opening decisions?',
       'Was every action item from last cycle reported on honestly?',
       'Does anything need to be escalated to a different meeting type?',
       'Are forward commitments specific enough to actually happen?',
-      'Is the next 30/30 scheduled — with the right group?'
+      'Is the next 30/30 scheduled \u2014 with the right group?'
     ]
   }
 };
 
-let timerInterval = null, timerSecs = 0, timerRunning = false, curItem = 0, agItems = [];
+/* ══════════════════════════════════════════
+   3D FUNCTION: pain × type × size → kit mods
+   ══════════════════════════════════════════ */
+function getKitContent(pain, type, size) {
+  if (!pain) return { severity: 'fine', problem: '', nudge: '', techniques: [], catalystOverride: null, pattern: null };
 
-function selQ(v, el) {
-  ST.q = v;
-  document.querySelectorAll('.q-card').forEach(c => c.classList.remove('sel'));
+  const sev = SEVERITY[pain] ? SEVERITY[pain][type] || 'fine' : 'fine';
+
+  // PAIN 1: One person runs the show
+  if (pain === 'dominant') {
+    if (type === 'ideation') {
+      const techBySize = {
+        small:  [{ n: 'Silent Idea Generation', d: "Everyone writes down ideas individually before sharing. No one can dominate what hasn't been said yet.", w: 'At this size, the leader can redirect dominance directly.' },
+                 { n: 'Round-Robin Sharing', d: 'Structured turns. No one can steamroll.', w: 'Ensures equal airtime in a small group.' }],
+        core:   [{ n: 'Brainwriting 6-3-5', d: '6 people write 3 ideas in 5 minutes, then pass the sheet. Each person builds on others. No groupthink. No domination.', w: 'Breaks dominance structurally \u2014 the technique does the work.' },
+                 { n: 'Silent Idea Generation', d: "Everyone writes before anyone speaks. Nothing to dominate yet.", w: 'Best paired with Brainwriting for maximum equal contribution.' }],
+        large:  [{ n: 'Gallery Walk', d: 'Post themes on the wall. Each person walks and adds ideas silently with sticky notes. Movement breaks the power dynamic of one person holding the floor.', w: 'Physical structure prevents dominance before whole-group even starts.' },
+                 { n: 'Role-Storming', d: "Adopt specific perspectives and generate from that viewpoint. Hard to dominate when everyone's playing a different role.", w: 'Best when the same person always anchors the conversation.' }]
+      };
+      const catBySize = {
+        small: null,
+        core: [{ n: 'The Amplifier', d: "Makes sure quieter voices get heard. Assign before the room fills up.", a: "Do this: 'We haven't heard from everyone \u2014 [name], what are you thinking?'" }],
+        large: [{ n: 'The Amplifier', d: "Makes sure quieter voices get heard across subgroups.", a: "Watch for the dominant voice. Protect quieter ideas." },
+                { n: 'Process Observer', d: "Watches dynamics. Reports on who's contributing and who's been shut out.", a: "Report what you saw, not what you think about it.", isEssential: true }]
+      };
+      const nudgeBySize = {
+        small: "Easier to manage directly at this size \u2014 the Leader/Guide can redirect in real time. Before the meeting, privately tell the quiet ones their ideas matter.",
+        core: "Assign the Amplifier before the room fills up. The structural technique does the work \u2014 Brainwriting makes it impossible for one person to dominate.",
+        large: "Physical structure does the work. Writing and pairs prevent dominance before the whole-group conversation even starts. Use the think-write-pairs-report pattern for every substantive agenda item."
+      };
+      return { severity: sev, problem: 'Dominant voice will kill idea generation before it starts.', nudge: nudgeBySize[size], techniques: techBySize[size], catalystOverride: catBySize[size], pattern: null };
+    }
+    if (type === 'activation') {
+      return {
+        severity: sev,
+        problem: "Dominant voice will push the group toward their preferred option.",
+        nudge: "State the decision criteria out loud before discussion starts. Once everyone agrees on the criteria, it's harder for one person to just declare a winner.",
+        techniques: [
+          { n: '2\u00d72 Matrix or Weighted Scoring', d: 'Criteria-based, not personality-based. Score each option against agreed criteria. Everyone votes at the same time.', w: "Best when you need to neutralize authority bias." },
+          { n: 'Dot Voting', d: 'Anonymous, equalizes influence. Each person gets the same number of dots regardless of title.', w: 'Best for a quick, visible decision that no one person can override.' }
+        ],
+        catalystOverride: [{ n: 'The Discerner', d: "Applies evidence, not opinion. Neutralizes authority bias.", a: "Ask: 'What evidence do we have? What are we treating as fact that's actually an assumption?'" }],
+        pattern: null
+      };
+    }
+    if (type === 'implementation') {
+      return {
+        severity: sev,
+        problem: "Dominant person assigns tasks based on their priorities, not the group's decision.",
+        nudge: "Go around the room: each person picks their own commitment. The dominant voice doesn't get to assign. People own what they choose.",
+        techniques: [],
+        catalystOverride: null,
+        pattern: null
+      };
+    }
+    if (type === 'thirty') {
+      return {
+        severity: sev,
+        problem: "Dominant person narrates the whole update; everyone else just nods.",
+        nudge: "Start the 30/30 by going around the table: each person, 60 seconds, their commitment only. No one speaks for anyone else.",
+        techniques: [],
+        catalystOverride: null,
+        pattern: null
+      };
+    }
+  }
+
+  // PAIN 2: We talk but never decide
+  if (pain === 'decisions') {
+    if (type === 'activation') {
+      return {
+        severity: sev,
+        problem: "The group has good discussions but never lands on a commitment. Same topics resurface next meeting.",
+        nudge: "Open by naming the decision method: 'We're using dot voting today \u2014 the top two become our commitments.' When people know the rules upfront, the conversation has somewhere to land.",
+        techniques: [
+          { n: 'Dot Voting', d: "Each person gets 3\u20135 dots. Simple, visual, fast. 'Let's keep all of them' is not a decision.", w: 'Best for narrowing a long list and forcing a choice.' },
+          { n: 'Eisenhower Matrix', d: 'Plot options on Urgent vs. Important. Focus on the important-but-not-urgent \u2014 that is where strategic work lives.', w: 'Best when the group confuses urgency with importance.' },
+          { n: 'Commitment Close', d: 'Each person states what they will do out loud before leaving. Galvanize energy around the chosen direction.', w: 'Non-negotiable. Every decision meeting ends with this.' }
+        ],
+        catalystOverride: [{ n: 'The Counterpoint', d: "Tests assumptions so discussion is productive, not circular. Pushes toward 'we have enough to decide.'", a: "Ask: 'What's the strongest argument against this?' Then: 'We've heard enough \u2014 let's decide.'" }],
+        pattern: null
+      };
+    }
+    if (type === 'implementation') {
+      return {
+        severity: sev,
+        problem: "Even after a decision, the group drifts back into re-discussing during execution.",
+        nudge: "If someone tries to reopen the decision, name it: 'We decided this in the last meeting. If something changed, schedule a new session. Right now \u2014 what's your commitment?'",
+        techniques: [],
+        catalystOverride: null,
+        pattern: null
+      };
+    }
+    if (type === 'thirty') {
+      return {
+        severity: sev,
+        problem: "The 30/30 becomes another discussion loop instead of a learning review.",
+        nudge: "If the group wants to re-decide something, that's good data \u2014 it means the last meeting missed something. Schedule the right meeting. Don't let the 30/30 become a second attempt at deciding.",
+        techniques: [],
+        catalystOverride: null,
+        pattern: null
+      };
+    }
+    return { severity: 'fine', problem: '', nudge: '', techniques: [], catalystOverride: null, pattern: null };
+  }
+
+  // PAIN 3: Nothing happens after
+  if (pain === 'followup') {
+    if (type === 'ideation') {
+      return {
+        severity: sev,
+        problem: "Good ideas get generated but vanish \u2014 no one owns the transition to action.",
+        nudge: "End the session by naming one person who owns the next step. Not 'we'll schedule something' \u2014 a name, a date, and what they'll bring to the next meeting.",
+        techniques: [],
+        catalystOverride: [{ n: 'The Learning Observer', d: "Captures what was learned and what ideas emerged that surprised the group.", a: "At the end: 'Here's what we discovered that we didn't expect.'" }],
+        pattern: null
+      };
+    }
+    if (type === 'activation') {
+      return {
+        severity: sev,
+        problem: "Decisions get made but nobody remembers what was decided or why \u2014 so nothing sticks.",
+        nudge: "Record the reasoning behind every decision. When someone asks 'why did we pick that?' three weeks later and there's no answer \u2014 that's when follow-through dies.",
+        techniques: [],
+        catalystOverride: [{ n: 'The Galvanizer', d: "Builds genuine enthusiasm for the chosen direction so follow-through has momentum.", a: "Say this: 'This is the one that changes things. Let's commit.'" }],
+        pattern: null
+      };
+    }
+    if (type === 'implementation') {
+      return {
+        severity: sev,
+        problem: "This is the core failure point. Tasks get assigned but don't get done. No accountability, no follow-up.",
+        nudge: "'I'll look into it' is not an action item. Every commitment needs a name, a deliverable, and a date. If someone can't give you all three, the commitment isn't real yet.",
+        techniques: [
+          { n: 'Red / Yellow / Green', d: 'Green = on track. Yellow = at risk. Red = blocked. Spend meeting time only on Yellow and Red.', w: "Your forcing function. Use every execution meeting." },
+          { n: 'Who / What / Deliverable / By When', d: 'Every action item needs all four. If any element is missing, stop and get it.', w: 'Non-negotiable format for this group.' }
+        ],
+        catalystOverride: [{ n: 'The Tenacity Driver', d: "Won't let vague commitments pass.", a: "Ask: 'What specifically will be done, by whom, by when \u2014 and what's the deliverable?'" }],
+        pattern: null
+      };
+    }
+    if (type === 'thirty') {
+      return {
+        severity: sev,
+        problem: "The 30/30 is designed to fix this \u2014 but only if it becomes a habit with teeth.",
+        nudge: "The 30/30 is where the habit gets built. Show up, report honestly, commit again. The rhythm of reconvening builds more trust than any single meeting. Don't skip it.",
+        techniques: [
+          { n: 'Mid-Cycle Nudge', d: "Someone follows up at 2 weeks. Not to police \u2014 to support. '[Name], how is [task] coming? Anything blocking you?'", w: 'Personal nudges work. Group reminders don\'t.' }
+        ],
+        catalystOverride: [{ n: 'The Learning Observer', d: "Names what changed between cycles. Spots the pattern that keeps blocking follow-through.", a: "Ask: 'What's different this time? What pattern do we keep hitting?'" }],
+        pattern: null
+      };
+    }
+  }
+
+  // PAIN 4: We go off the rails
+  if (pain === 'tangents') {
+    if (type === 'activation') {
+      return {
+        severity: sev,
+        problem: "Tangents during decision-making are the most destructive \u2014 rabbit holes eat the time and the group never reaches a decision.",
+        nudge: "State the decision method before the first word of discussion. When people know how the decision will be made, the conversation stays in bounds.",
+        techniques: [],
+        catalystOverride: null,
+        pattern: null
+      };
+    }
+    if (type === 'implementation') {
+      return {
+        severity: sev,
+        problem: "People re-open decisions or drift into strategy during what should be an execution meeting.",
+        nudge: "When someone tries to reopen a decision during an execution meeting, name it: 'That's a different conversation. If something changed, we'll schedule a new session. Right now \u2014 what's your next step?'",
+        techniques: [
+          { n: 'Stand-Up Format', d: "Each person answers three questions: What did I complete? What's next? What's in my way? Keeps updates tight.", w: 'Best for keeping execution meetings focused and fast.' }
+        ],
+        catalystOverride: null,
+        pattern: null
+      };
+    }
+    if (type === 'thirty') {
+      return {
+        severity: sev,
+        problem: "The 30/30 drifts into free-form conversation instead of structured review.",
+        nudge: "If the 30/30 keeps going off the rails, the agenda might be wrong \u2014 or the group might need a different meeting entirely. Check: is this still a 30/30, or do we need a different session?",
+        techniques: [],
+        catalystOverride: null,
+        pattern: null
+      };
+    }
+    return { severity: 'fine', problem: '', nudge: '', techniques: [], catalystOverride: null, pattern: null };
+  }
+
+  // PAIN 5: Half the room is silent
+  if (pain === 'silence') {
+    if (type === 'ideation') {
+      const techBySize = {
+        small:  [{ n: 'Silent Idea Generation', d: "Everyone writes before anyone speaks. Nothing to be intimidated by yet.", w: 'At this size, the leader can directly invite each person.' },
+                 { n: 'Round-Robin Sharing', d: 'Structured turns. Everyone speaks, nowhere to hide.', w: 'Ensures every voice is heard in a small group.' }],
+        core:   [{ n: 'Silent Idea Generation', d: "Everyone writes before anyone speaks. Nobody can dominate what hasn't been said out loud yet.", w: 'Best opening technique for groups with participation problems.' },
+                 { n: 'Brainwriting 6-3-5', d: 'Write ideas, pass the sheet, build on others. No verbal domination.', w: 'Structural equal contribution.' }],
+        large:  [{ n: 'Gallery Walk', d: 'Post and walk. Add ideas silently with sticky notes. No verbal pressure.', w: 'Eliminates verbal dominance entirely.' },
+                 { n: 'Silent Idea Generation', d: "Write first, share second. Pairs discuss before whole group.", w: 'Use with think-write-pairs-report pattern.' }]
+      };
+      return {
+        severity: sev,
+        problem: "Idea generation with only three voices produces three people's ideas. You need all the brains in the room.",
+        nudge: "Start with a written round before any verbal discussion. Everyone writes one idea or reaction first \u2014 nobody can dominate what hasn't been said out loud yet.",
+        techniques: techBySize[size],
+        catalystOverride: size === 'small' ? null : [{ n: 'The Amplifier', d: "Makes sure quieter voices get heard.", a: "'We haven't heard from everyone \u2014 [name], what are you thinking?'" }],
+        pattern: null
+      };
+    }
+    if (type === 'activation') {
+      return {
+        severity: sev,
+        problem: "Quiet people during decisions means the decision only reflects a few perspectives. Risks blind spots and weak buy-in.",
+        nudge: "Before the vote, go around the table: each person names one thing they see that hasn't been said. Not a speech \u2014 one sentence. You'll be surprised what the quiet ones have been thinking.",
+        techniques: [
+          { n: 'Dot Voting', d: "Every person's vote counts equally, regardless of whether they spoke up verbally.", w: 'Equalizes influence without requiring verbal participation.' }
+        ],
+        catalystOverride: [{ n: 'The Amplifier', d: "Watches for who hasn't weighed in and creates space for them.", a: "'We haven't heard from [name] on this \u2014 what are you seeing?'" }],
+        pattern: null
+      };
+    }
+    if (type === 'implementation') {
+      return {
+        severity: sev,
+        problem: "Quiet people leave without real buy-in. They nod, take an assignment, and don't follow through because they never actually committed.",
+        nudge: "Don't assign tasks to the quiet people \u2014 let them choose. 'What can you take on?' is a different question than 'You're handling X.' One builds ownership. The other builds resentment.",
+        techniques: [],
+        catalystOverride: [{ n: 'The Enabler', d: "Surfaces barriers quiet people won't volunteer.", a: "Ask: 'What would make this easier for you to actually get done?'" }],
+        pattern: null
+      };
+    }
+    return { severity: 'fine', problem: '', nudge: '', techniques: [], catalystOverride: null, pattern: null };
+  }
+
+  // PAIN 6: Low energy
+  if (pain === 'energy') {
+    if (type === 'ideation') {
+      return {
+        severity: sev,
+        problem: "Creative work dies without energy. A checked-out group will recycle safe ideas instead of generating real ones.",
+        nudge: "Cut 20 minutes from whatever you planned. Seriously. The energy follows the pace. A sharp, short meeting where people actually show up beats a long one where everyone's watching the clock.",
+        techniques: [
+          { n: 'Gallery Walk', d: 'Physical movement breaks monotony. Post themes, walk and add ideas with sticky notes.', w: 'Best for re-energizing a flat room.' },
+          { n: 'Role-Storming', d: "Adopt a different perspective \u2014 customer, competitor, visionary. Hard to be checked out when you're playing a character.", w: 'Best when the group keeps recycling the same ideas.' }
+        ],
+        catalystOverride: [{ n: 'The Galvanizer', d: "Builds energy and momentum.", a: "'What would we do if we couldn't fail?'" }],
+        pattern: null
+      };
+    }
+    if (type === 'activation') {
+      return {
+        severity: sev,
+        problem: "Low energy during decision-making leads to passive agreement \u2014 people go along because they don't care enough to push back.",
+        nudge: "If the room is flat, the decision will be flat. Before you vote, remind them what's at stake: 'If we get this right, here's what changes.' Energy follows meaning.",
+        techniques: [],
+        catalystOverride: [{ n: 'The Galvanizer', d: "Builds genuine energy around the decision.", a: "'This is the one that changes things. Let's commit.'" }],
+        pattern: null
+      };
+    }
+    if (type === 'thirty') {
+      return {
+        severity: sev,
+        problem: "Low energy in the 30/30 might signal the work isn't meaningful anymore \u2014 or people are burned out.",
+        nudge: "If energy is low in the 30/30, pay attention \u2014 it might mean the work doesn't feel meaningful anymore. Ask: 'Is this still the right thing to be working on?' Sometimes the best move is changing direction.",
+        techniques: [],
+        catalystOverride: [{ n: 'The Learning Observer', d: "Names the energy pattern.", a: "'We've been flat for two cycles. What's changed?'" }],
+        pattern: null
+      };
+    }
+    return { severity: 'fine', problem: '', nudge: '', techniques: [], catalystOverride: null, pattern: null };
+  }
+
+  // PAIN 7: Fine — level up (or fallback)
+  return { severity: 'fine', problem: '', nudge: "Run the one-word opener at the start of every meeting for 30 days. Watch how it shifts the room before anything else happens.", techniques: [], catalystOverride: null, pattern: null };
+}
+
+/* ══════════════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════════════ */
+const STEP_IDS_PAIN = ['s-pain', 's-purpose', 's-size', 's-fam'];
+const STEP_IDS_PURPOSE = ['s-purpose', 's-size', 's-fam'];
+let currentStep = 0;
+
+function getSteps() { return ST.path === 'pain' ? STEP_IDS_PAIN : STEP_IDS_PURPOSE; }
+function getTotalSteps() { return getSteps().length; }
+
+function choosePath(p) {
+  ST.path = p;
+  if (p === 'purpose') ST.pain = null;
+  currentStep = 0;
+  showScreen(getSteps()[0]);
+  updateProgress();
+
+  // Show/hide 4th bar
+  document.getElementById('bar-4').style.display = p === 'pain' ? '' : 'none';
+  document.getElementById('prog').style.display = 'flex';
+
+  // If pain path and returning, pre-highlight purpose
+  if (p === 'pain' && ST.pain) {
+    preHighlightPurpose();
+  }
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  const total = getTotalSteps();
+  const stepNum = currentStep + 1;
+  document.getElementById('prog-lbl').textContent = stepNum + ' / ' + total;
+
+  for (let i = 1; i <= 4; i++) {
+    const bar = document.getElementById('bar-' + i);
+    if (i > total) { bar.style.display = 'none'; continue; }
+    bar.style.display = '';
+    bar.className = 'bar' + (i < stepNum ? ' done' : i === stepNum ? ' on' : '');
+  }
+
+  // Update step labels
+  const steps = getSteps();
+  const labels = { 's-pain': 'lbl-pain', 's-purpose': 'lbl-purpose', 's-size': 'lbl-size', 's-fam': 'lbl-fam' };
+  steps.forEach((sid, idx) => {
+    const lbl = document.getElementById(labels[sid]);
+    if (lbl) lbl.textContent = 'Step ' + (idx + 1) + ' of ' + total;
+  });
+}
+
+function goNext() {
+  const steps = getSteps();
+  if (currentStep < steps.length - 1) {
+    currentStep++;
+    showScreen(steps[currentStep]);
+    updateProgress();
+
+    // Pre-highlight purpose if coming from pain step
+    if (steps[currentStep] === 's-purpose' && ST.pain && !ST.q) {
+      preHighlightPurpose();
+    }
+  }
+}
+
+function goPrev() {
+  const steps = getSteps();
+  if (currentStep > 0) {
+    currentStep--;
+    showScreen(steps[currentStep]);
+    updateProgress();
+  } else {
+    backToRouting();
+  }
+}
+
+function backToRouting() {
+  document.getElementById('prog').style.display = 'none';
+  showScreen('routing');
+}
+
+function preHighlightPurpose() {
+  const rec = PAIN_TO_Q[ST.pain];
+  if (!rec) return;
+
+  // Show recommendation note
+  const labels = { ideation: 'Explore possibilities', activation: 'Choose a direction', implementation: 'Turn a decision into action', thirty: 'Review progress and reset' };
+  const note = document.getElementById('rec-note');
+  note.innerHTML = 'Based on your answer, we recommend a <strong>' + labels[rec] + '</strong> meeting \u2014 but you can choose any type.';
+  note.style.display = 'block';
+
+  // Pre-select the card
+  const card = document.querySelector('#purpose-grid .q-card[data-val="' + rec + '"]');
+  if (card) {
+    document.querySelectorAll('#purpose-grid .q-card').forEach(c => c.classList.remove('sel'));
+    card.classList.add('sel');
+    ST.q = rec;
+    document.getElementById('btn-purpose').disabled = false;
+  }
+}
+
+/* ══════════════════════════════════════════
+   SELECTIONS
+   ══════════════════════════════════════════ */
+function selPain(v, el) {
+  ST.pain = v;
+  document.querySelectorAll('#pain-grid .q-card').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
-  document.getElementById('b1').disabled = false;
+  document.getElementById('btn-pain').disabled = false;
+
+  // Reset purpose pre-highlight when pain changes
+  ST.q = null;
+  document.querySelectorAll('#purpose-grid .q-card').forEach(c => c.classList.remove('sel'));
+  document.getElementById('btn-purpose').disabled = true;
+}
+
+function selPurpose(v, el) {
+  ST.q = v;
+  document.querySelectorAll('#purpose-grid .q-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('btn-purpose').disabled = false;
   if (ST.size) updateCompat();
 }
 
 function selSize(v, el) {
   ST.size = v;
-  document.querySelectorAll('.size-card').forEach(c => c.classList.remove('sel'));
+  document.querySelectorAll('#size-grid .size-card').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
-  document.getElementById('b2').disabled = false;
+  document.getElementById('btn-size').disabled = false;
   updateCompat();
 }
 
@@ -780,28 +1386,21 @@ function updateCompat() {
   if (!ST.q || !ST.size) { note.style.display = 'none'; return; }
   const c = COMPAT[ST.q][ST.size];
   note.className = 'compat-note ' + c.type;
-  note.innerHTML = `<div class="compat-label">${c.label}</div>${c.msg}`;
+  note.innerHTML = '<div class="compat-label">' + c.label + '</div>' + c.msg;
   note.style.display = 'block';
 }
 
 function selFam(v, el) {
   ST.fam = v;
-  document.querySelectorAll('.fam-card').forEach(c => c.classList.remove('sel'));
+  document.querySelectorAll('#fam-grid .fam-card').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
-  document.getElementById('b3').disabled = false;
+  document.getElementById('btn-fam').disabled = false;
 }
 
-function goTo(n) {
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('show'));
-  const el = document.getElementById('s' + n) || document.getElementById('res');
-  if (el) el.classList.add('show');
-  document.querySelectorAll('.bar').forEach(b => {
-    const sn = parseInt(b.dataset.s);
-    b.className = 'bar' + (sn < n ? ' done' : sn === n ? ' on' : '');
-  });
-  document.getElementById('prog-lbl').textContent = n + ' / 3';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+/* ══════════════════════════════════════════
+   TIMER
+   ══════════════════════════════════════════ */
+let timerInterval = null, timerSecs = 0, timerRunning = false, curItem = 0, agItems = [];
 
 function fmt(s) { const m = Math.floor(s / 60); const sc = s % 60; return m + ':' + (sc < 10 ? '0' : '') + sc; }
 
@@ -852,189 +1451,207 @@ function nextItem() {
   }
 }
 
+/* ══════════════════════════════════════════
+   BUILD KIT
+   ══════════════════════════════════════════ */
 function buildKit() {
   const d = DATA[ST.q];
   const s = ST.size;
-  const isNew = ST.fam === 'new';
   const dur = d.getDur(s);
   agItems = d.getAgenda(s);
-  const roles = d.getRoles(s);
-  const tech = d.getTech(s);
+  const baseRoles = d.getDefaultRoles(s);
+  const baseTech = d.getDefaultTech(s);
   const compat = COMPAT[ST.q][s];
+  const kit = getKitContent(ST.pain, ST.q, s);
 
-  const sizeLabel = s === 'small' ? '3–5 people' : s === 'ideal' ? '6–10 people' : '11–15 people';
-
+  const sizeLabel = s === 'small' ? '3\u20135 people' : s === 'core' ? '6\u20139 people' : '10+ people';
   const printDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const showCoach = ST.fam === 'coach';
+  const showSome = ST.fam === 'some' || showCoach;
 
-  let h = `
-  <div class="print-header">
-    <span><strong>Syncovate</strong> · ${d.label} Meeting Kit · ${sizeLabel}</span>
-    <span>Generated ${printDate}</span>
-  </div>
-  <div class="kit-header">
-    <div class="kit-badge">${d.altitude}</div>
-    <h2>${d.label} Meeting Kit</h2>
-    <p>${dur} &nbsp;·&nbsp; ${sizeLabel}</p>
-  </div>`;
+  // Merge techniques: pain-specific first, then base
+  let tech = baseTech;
+  if (kit.techniques && kit.techniques.length > 0) {
+    const painNames = new Set(kit.techniques.map(t => t.n));
+    tech = [...kit.techniques, ...baseTech.filter(t => !painNames.has(t.n))];
+  }
 
-  // Size + altitude signal
-  h += `<div class="kit-warning ${compat.type}">
-    <div class="kw-label">${compat.label}</div>
-    <p>${compat.msg}</p>
-  </div>`;
+  // Merge roles: use catalyst override if provided
+  let roles = baseRoles;
+  if (kit.catalystOverride) {
+    roles = { ...baseRoles, catalyst: kit.catalystOverride };
+  }
 
-  h += `<div class="anchor-question">
-    <div class="aq-label">The question this meeting answers</div>
-    <h3>${d.anchor}</h3>
-  </div>
+  let h = '';
 
-  <div class="drj-quote">
-    <blockquote>${d.quote}</blockquote>
-    <div class="attr">— Dr. J, Syncovate</div>
-  </div>
+  // Print header
+  h += '<div class="print-header"><span><strong>Syncovate</strong> \u00b7 ' + d.label + ' Meeting Kit \u00b7 ' + sizeLabel + '</span><span>Generated ' + printDate + '</span></div>';
 
-  <div class="nudge">
-    <div class="nudge-lbl">Dr. J's move for this meeting</div>
-    <p>${d.nudge}</p>
-  </div>`;
+  // Kit header
+  h += '<div class="kit-header"><div class="kit-badge">' + d.focus + '</div>';
+  h += '<h2>' + d.label + ' Meeting Kit</h2>';
+  h += '<p>' + dur + ' &nbsp;\u00b7&nbsp; ' + sizeLabel;
+  if (ST.pain && ST.pain !== 'none') h += ' &nbsp;\u00b7&nbsp; Built for: ' + PAIN_LABELS[ST.pain];
+  h += '</p></div>';
+
+  // Compat warning
+  h += '<div class="kit-warning ' + compat.type + '"><div class="kw-label">' + compat.label + '</div><p>' + compat.msg + '</p></div>';
+
+  // Anchor question
+  h += '<div class="anchor-question"><div class="aq-label">The question this meeting answers</div><h3>' + d.anchor + '</h3></div>';
+
+  // Dr. J quote
+  h += '<div class="drj-quote"><blockquote>' + d.quote + '</blockquote><div class="attr">\u2014 Dr. J, Syncovate</div></div>';
+
+  // Pain-specific nudge (CRITICAL/MODERATE only)
+  if (kit.nudge && kit.severity !== 'fine') {
+    h += '<div class="nudge"><div class="nudge-lbl">Your specific challenge</div><p>' + kit.nudge + '</p></div>';
+    if (kit.problem && kit.severity === 'critical') {
+      h += '<div class="kit-warning info"><div class="kw-label">Why this matters here</div><p>' + kit.problem + '</p></div>';
+    }
+  }
+
+  // Dr. J's move (per meeting type)
+  if (showSome) {
+    h += '<div class="nudge"><div class="nudge-lbl">Dr. J\'s move for this meeting</div><p>' + d.nudge + '</p></div>';
+  }
+
+  // Large-group pattern
+  if (s === 'large') {
+    h += '<div class="lg-pattern"><div class="kw-label">How to run this with a large group</div>';
+    h += '<p style="font-size:13px;color:var(--charcoal);margin-bottom:8px">Use this sequence for every substantive agenda item:</p>';
+    h += '<ol><li><strong>Think &amp; write solo</strong> (2\u20133 min) \u2014 Everyone writes before anyone speaks.</li>';
+    h += '<li><strong>Pairs or small groups</strong> (5\u20138 min) \u2014 Groups of 2\u20134 discuss. Each group picks one key insight to share.</li>';
+    h += '<li><strong>Whole-group report-out</strong> \u2014 One person per group shares. One Recorder captures on a single visible surface.</li></ol></div>';
+
+    h += '<div class="lg-roles"><div class="kw-label">Strongly recommended for groups this size</div>';
+    h += '<ul><li><strong>Timekeeper</strong> \u2014 manages subgroup timing and whole-group transitions</li>';
+    h += '<li><strong>Process Observer</strong> \u2014 watches dynamics across subgroups, flags when participation skews</li>';
+    h += '<li><strong>Recorder</strong> \u2014 captures on a visible surface the whole room can see</li></ul></div>';
+  }
 
   // Section nav
-  h += `<div class="kit-nav">
-    <a href="#kit-agenda">Agenda</a>
-    <a href="#kit-roles">Roles</a>
-    <a href="#kit-techniques">Techniques</a>
-    <a href="#kit-reflection">Reflection</a>
-  </div>`;
+  h += '<div class="kit-nav"><a href="#kit-agenda">Agenda</a><a href="#kit-roles">Roles</a><a href="#kit-techniques">Techniques</a><a href="#kit-reflection">Reflection</a></div>';
 
-  if (isNew) {
-    h += `<div class="section">
-      <div class="sec-head"><div><h3>Before you start</h3><p>First time with structured meetings</p></div></div>
-      <div class="sec-body">
-        <div class="onboard-tip"><strong>Send this kit 24 hours ahead</strong><p>Frame it as an experiment: "We're trying a new format and we'll debrief after." This reduces resistance before anyone walks in the door.</p></div>
-        <div class="onboard-tip"><strong>Assign roles before the room fills up</strong><p>Don't ask for volunteers in the moment. People show up differently when they know their role ahead of time.</p></div>
-        <div class="onboard-tip"><strong>Name the altitude out loud at the start</strong><p>"Today we're answering '${d.anchor}' — that means we're focused on ${d.onboard_alt}. If we drift, I'll redirect us."</p></div>
-      </div>
-    </div>`;
+  // Onboarding (coach level)
+  if (showCoach) {
+    h += '<div class="section"><div class="sec-head"><div><h3>Before you start</h3><p>First time with structured facilitation</p></div></div><div class="sec-body">';
+    h += '<div class="onboard-tip"><strong>Send this kit 24 hours ahead</strong><p>Frame it as an experiment: "We\'re trying a new format and we\'ll debrief after." This reduces resistance before anyone walks in the door.</p></div>';
+    h += '<div class="onboard-tip"><strong>Assign roles before the room fills up</strong><p>Don\'t ask for volunteers in the moment. People show up differently when they know their role ahead of time.</p></div>';
+    h += '<div class="onboard-tip"><strong>Name the focus out loud at the start</strong><p>"Today we\'re focused on ' + d.onboard_alt + '. If we drift, I\'ll redirect us."</p></div>';
+    h += '</div></div>';
   }
 
   // AGENDA
-  h += `<div class="section" id="kit-agenda">
-    <div class="sec-head"><div><h3>Agenda · ${dur}</h3><p>Click dots to track · Start meeting to run the live timer</p></div></div>
-    <div class="sec-body">
-      <div id="launch-wrap" style="margin-bottom:16px">
-        <button class="launch-btn" onclick="launchMeeting()">▶ Start this meeting</button>
-      </div>
-      <div class="timer-box" id="timer-box">
-        <div class="timer-current" id="t-current">—</div>
-        <div class="timer-display" id="t-display">0:00</div>
-        <div class="timer-track"><div class="timer-fill" id="t-fill" style="width:100%"></div></div>
-        <div class="timer-controls" id="t-controls">
-          <button class="t-btn-start" onclick="startTimer()">Start timer</button>
-          <button class="t-btn-next" onclick="nextItem()">Next item →</button>
-          <button class="t-btn-pause" onclick="pauseTimer()">Pause</button>
-        </div>
-      </div>
-      <table class="agenda">
-        ${agItems.map((a, i) => {
-          const sn = a.sizeNote && a.sizeNote[s] ? `<div class="a-size-note">↳ ${a.sizeNote[s]}</div>` : '';
-          return `<tr>
-            <td class="a-time">${a.t}</td>
-            <td><div class="a-title">${a.h}</div><div class="a-desc">${a.d}</div>${sn}</td>
-            <td class="a-dot-col"><div class="a-dot" id="t-dot-${i}" onclick="this.classList.toggle('done')"></div></td>
-          </tr>`;
-        }).join('')}
-      </table>
-    </div>
-  </div>`;
+  h += '<div class="section" id="kit-agenda"><div class="sec-head"><div><h3>Agenda \u00b7 ' + dur + '</h3><p>Click dots to track \u00b7 Start meeting to run the live timer</p></div></div><div class="sec-body">';
+  h += '<div id="launch-wrap" style="margin-bottom:16px"><button class="launch-btn" onclick="launchMeeting()">\u25b6 Start this meeting</button></div>';
+  h += '<div class="timer-box" id="timer-box"><div class="timer-current" id="t-current">\u2014</div><div class="timer-display" id="t-display">0:00</div>';
+  h += '<div class="timer-track"><div class="timer-fill" id="t-fill" style="width:100%"></div></div>';
+  h += '<div class="timer-controls" id="t-controls"><button class="t-btn-start" onclick="startTimer()">Start timer</button><button class="t-btn-next" onclick="nextItem()">Next item \u2192</button><button class="t-btn-pause" onclick="pauseTimer()">Pause</button></div></div>';
+  h += '<table class="agenda">';
+  agItems.forEach((a, i) => {
+    h += '<tr><td class="a-time">' + a.t + '</td><td><div class="a-title">' + a.h + '</div><div class="a-desc">' + a.d + '</div></td>';
+    h += '<td class="a-dot-col"><div class="a-dot" id="t-dot-' + i + '" onclick="this.classList.toggle(\'done\')"></div></td></tr>';
+  });
+  h += '</table></div></div>';
 
   // ROLES
-  const allRoles = [...(roles.essential || []), ...(roles.catalyst || [])];
-  h += `<div class="section" id="kit-roles">
-    <div class="sec-head"><div><h3>Role cards</h3><p>${s === 'small' ? 'Streamlined for small group' : 'Assign before the meeting starts'}</p></div></div>
-    <div class="sec-body">
-      <div class="roles-grid">
-        ${(roles.essential || []).map(r => `<div class="role-card ${r.combined ? 'combined' : 'essential'}">
-          <div class="role-type">${r.combined ? 'Combined role' : 'Essential'}</div>
-          <h4>${r.n}</h4>
-          <div class="role-desc">${r.d}</div>
-          ${r.a ? `<div class="role-action">${r.a}</div>` : ''}
-        </div>`).join('')}
-        ${(roles.catalyst || []).map(r => `<div class="role-card catalyst">
-          <div class="role-type">Catalyst · ${d.label}</div>
-          <h4>${r.n}</h4>
-          <div class="role-desc">${r.d}</div>
-          ${r.a ? `<div class="role-action">${r.a}</div>` : ''}
-        </div>`).join('')}
-      </div>
-    </div>
-  </div>`;
+  h += '<div class="section" id="kit-roles"><div class="sec-head"><div><h3>Role cards</h3><p>' + (s === 'small' ? 'Streamlined for small group' : 'Assign before the meeting starts') + '</p></div></div><div class="sec-body"><div class="roles-grid">';
+  (roles.essential || []).forEach(r => {
+    h += '<div class="role-card ' + (r.combined ? 'combined' : 'essential') + '"><div class="role-type">' + (r.combined ? 'Combined role' : 'Essential') + '</div>';
+    h += '<h4>' + r.n + '</h4><div class="role-desc">' + r.d + '</div>';
+    if (r.a && showSome) h += '<div class="role-action">' + r.a + '</div>';
+    h += '</div>';
+  });
+  (roles.catalyst || []).forEach(r => {
+    h += '<div class="role-card catalyst"><div class="role-type">Catalyst \u00b7 ' + d.label + '</div>';
+    h += '<h4>' + r.n + '</h4><div class="role-desc">' + r.d + '</div>';
+    if (r.a && showSome) h += '<div class="role-action">' + r.a + '</div>';
+    h += '</div>';
+  });
+  h += '</div></div></div>';
 
   // TECHNIQUES
-  const techLabel = ST.q === 'ideation' ? 'Techniques — not open brainstorming' :
-                    ST.q === 'decision' ? 'Decision-making tools' :
-                    ST.q === 'activation' ? 'Commitment tools' : 'Learning loop tools';
-  h += `<div class="section" id="kit-techniques">
-    <div class="sec-head"><div><h3>${techLabel}</h3><p>Pick one before the meeting starts</p></div></div>
-    <div class="sec-body">
-      ${tech.map(t => `<div class="tech-card"><h4>${t.n}</h4><p>${t.d}</p><div class="tech-when">↳ ${t.w}</div></div>`).join('')}
-    </div>
-  </div>`;
+  const techLabel = ST.q === 'ideation' ? 'Techniques \u2014 not open brainstorming' :
+                    ST.q === 'activation' ? 'Decision-making tools' :
+                    ST.q === 'implementation' ? 'Execution tools' : 'Learning loop tools';
+  h += '<div class="section" id="kit-techniques"><div class="sec-head"><div><h3>' + techLabel + '</h3><p>Pick one before the meeting starts</p></div></div><div class="sec-body">';
+  tech.forEach(t => {
+    h += '<div class="tech-card"><h4>' + t.n + '</h4><p>' + t.d + '</p>';
+    if (showSome) h += '<div class="tech-when">\u21b3 ' + t.w + '</div>';
+    h += '</div>';
+  });
+  h += '</div></div>';
 
   // REFLECTION
-  h += `<div class="section" id="kit-reflection">
-    <div class="sec-head"><div><h3>Post-meeting reflection</h3><p>Within 24 hours · 10 minutes · Knowledge Keeper leads</p></div></div>
-    <div class="sec-body">
-      ${d.refl.map((q, i) => `<div class="refl-item"><span class="refl-num">${String(i + 1).padStart(2, '0')}</span><span>${q}</span></div>`).join('')}
-    </div>
-  </div>`;
+  if (showSome) {
+    h += '<div class="section" id="kit-reflection"><div class="sec-head"><div><h3>Post-meeting reflection</h3><p>Within 24 hours \u00b7 10 minutes \u00b7 Recorder leads</p></div></div><div class="sec-body">';
+    d.refl.forEach((q, i) => {
+      h += '<div class="refl-item"><span class="refl-num">' + String(i + 1).padStart(2, '0') + '</span><span>' + q + '</span></div>';
+    });
+    h += '</div></div>';
+  }
 
-  h += `<div class="kit-actions">
-    <button class="act-btn" onclick="window.print()">🖨 Print this kit</button>
-    <button class="act-btn" onclick="copyKitLink(this)">🔗 Copy link to this kit</button>
-    <button class="act-btn" onclick="resetKit()">↻ Start over</button>
-  </div>
-  <div class="footer"><p>Built by Syncovate · Dr. Shannon Jennings, PsyD, LMHC &nbsp;·&nbsp; Great meetings don't happen by accident.</p></div>`;
+  // Actions
+  h += '<div class="kit-actions"><button class="act-btn" onclick="window.print()">\ud83d\udda8 Print this kit</button>';
+  h += '<button class="act-btn" onclick="copyKitLink(this)">\ud83d\udd17 Copy link to this kit</button>';
+  h += '<button class="act-btn" onclick="resetKit()">\u21bb Start over</button></div>';
+  h += '<div class="footer"><p>Built by Syncovate \u00b7 Dr. Shannon Jennings, PsyD, LMHC &nbsp;\u00b7&nbsp; Great meetings don\'t happen by accident.</p></div>';
 
-  // Update URL hash for sharing
-  history.replaceState(null, '', '#q=' + ST.q + '&s=' + ST.size + '&f=' + ST.fam);
+  // Update URL hash
+  let hash = '#q=' + ST.q + '&s=' + ST.size + '&f=' + ST.fam;
+  if (ST.pain) hash = '#p=' + ST.pain + '&' + hash.slice(1);
+  history.replaceState(null, '', hash);
 
+  // Render
   const res = document.getElementById('res');
   res.innerHTML = h;
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('show'));
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('show'));
   res.classList.add('show');
   document.getElementById('prog').style.display = 'none';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+/* ══════════════════════════════════════════
+   RESET + SHARE
+   ══════════════════════════════════════════ */
 function resetKit() {
-  ST.q = null; ST.size = null; ST.fam = null;
+  ST.path = null; ST.pain = null; ST.q = null; ST.size = null; ST.fam = null;
   clearInterval(timerInterval); timerRunning = false; curItem = 0; agItems = [];
-  ['b1','b2','b3'].forEach(id => document.getElementById(id).disabled = true);
+  ['btn-pain', 'btn-purpose', 'btn-size', 'btn-fam'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = true;
+  });
   document.querySelectorAll('.q-card, .size-card, .fam-card').forEach(c => c.classList.remove('sel'));
   document.getElementById('compat-note').style.display = 'none';
-  document.getElementById('prog').style.display = 'flex';
+  document.getElementById('rec-note').style.display = 'none';
+  document.getElementById('prog').style.display = 'none';
   history.replaceState(null, '', location.pathname);
-  goTo(1);
+  showScreen('routing');
 }
 
 function copyKitLink(btn) {
   navigator.clipboard.writeText(location.href).then(() => {
     const orig = btn.textContent;
-    btn.textContent = '✓ Copied!';
+    btn.textContent = '\u2713 Copied!';
     setTimeout(() => btn.textContent = orig, 2000);
   });
 }
 
-// Load from URL hash if present
+/* ══════════════════════════════════════════
+   LOAD FROM URL HASH
+   ══════════════════════════════════════════ */
 (function() {
   const hash = location.hash.slice(1);
   if (!hash) return;
   const params = Object.fromEntries(hash.split('&').map(p => p.split('=')));
-  const validQ = ['ideation', 'decision', 'activation', 'thirty'];
-  const validS = ['small', 'ideal', 'large'];
-  const validF = ['new', 'some', 'experienced'];
+  const validQ = ['ideation', 'activation', 'implementation', 'thirty'];
+  const validS = ['small', 'core', 'large'];
+  const validF = ['simple', 'some', 'coach'];
   if (validQ.includes(params.q) && validS.includes(params.s) && validF.includes(params.f)) {
     ST.q = params.q; ST.size = params.s; ST.fam = params.f;
+    if (params.p) { ST.pain = params.p; ST.path = 'pain'; }
+    else { ST.path = 'purpose'; }
     buildKit();
   }
 })();
